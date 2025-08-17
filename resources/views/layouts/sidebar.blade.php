@@ -9,7 +9,7 @@
         {{-- Dropdown Bidang Sekretariat--}}
         <div>
             <button @click="openSekretariat = !openSekretariat" 
-                class="flex items-center justify-between w-full px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">
+                class="flex text-left justify-between w-full px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">
                 Bidang Sekretariat
                 <span x-text="openSekretariat ? '▲' : '▼'"></span>
             </button>
