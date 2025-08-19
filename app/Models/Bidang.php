@@ -12,7 +12,6 @@ class Bidang extends Model
     // Tentukan kolom mana yang boleh diisi massal
     protected $fillable = [
         'nama_bidang',
-        'deskripsi',
     ];
 
     // Relasi: satu bidang memiliki banyak seksi

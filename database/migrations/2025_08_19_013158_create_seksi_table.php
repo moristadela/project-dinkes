@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('seksis', function (Blueprint $table) {
-           $table->id();
-            $table->foreignId('bidang_id')->constrained('bidang')->onDelete('cascade');
+        Schema::create('seksi', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('bidang_id')->constrained('bidang');
             $table->string('nama_seksi');
-            $table->text('deskripsi')->nullable();
-            $table->text('target_url'); // URL asli yang akan dituju
-            $table->string('shortlink_code', 10)->unique(); // Kode unik untuk shortlink
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('seksis');
+        Schema::dropIfExists('seksi');
     }
 };
