@@ -5,7 +5,7 @@
         {{-- Navbar --}}
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-4">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-4">
                         <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" class="h-12 flex-shrink-0" alt="Logo" />
                         <div class="text-red-600 font-bold uppercase leading-tight flex flex-col flex-shrink-0">
                             <div class="text-lg bold">DINAS KESEHATAN</div>
