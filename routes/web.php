@@ -36,7 +36,7 @@ Route::get('/admin/dashboard', function () {
 
     // arahkan ke views/admin/dashboard.blade.php
     return view('admin.dashboard', compact('stats', 'seksi'));
-})->name('admin.dashboard');
+})->middleware(['auth'])->name('admin.dashboard');
 
 // Dashboard User (default pakai layouts.app)
 Route::get('/dashboard', function () {
