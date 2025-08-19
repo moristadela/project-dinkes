@@ -11,20 +11,18 @@ use Illuminate\Support\Str; // Import Str untuk generate string acak
 class SeksiController extends Controller {
     public function index() {
         $seksis = Seksi::with('bidang')->latest()->paginate(10);
-        return view('admin.seksi.index', compact('seksis'));
+        return view('admin.seksi.index', compact('seksi'));
     }
 
     public function create() {
         $bidangs = Bidang::orderBy('nama_bidang')->get(); // Ambil semua bidang untuk dropdown
-        return view('admin.seksi.create', compact('bidangs'));
+        return view('admin.seksi.create', compact('bidang'));
     }
 
     public function store(Request $request) {
         $request->validate([
             'bidang_id' => 'required|exists:bidang,id',
             'nama_seksi' => 'required|string|max:255',
-            'target_url' => 'required|url',
-            'deskripsi' => 'nullable|string',
         ]);
 
         $data = $request->all();
@@ -37,15 +35,13 @@ class SeksiController extends Controller {
 
     public function edit(Seksi $seksi) {
         $bidangs = Bidang::orderBy('nama_bidang')->get();
-        return view('admin.seksi.edit', compact('seksi', 'bidangs'));
+        return view('admin.seksi.edit', compact('seksi', 'bidang'));
     }
 
     public function update(Request $request, Seksi $seksi) {
         $request->validate([
             'bidang_id' => 'required|exists:bidang,id',
             'nama_seksi' => 'required|string|max:255',
-            'target_url' => 'required|url',
-            'deskripsi' => 'nullable|string',
         ]);
 
         $seksi->update($request->all());

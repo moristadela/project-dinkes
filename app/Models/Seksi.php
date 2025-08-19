@@ -10,9 +10,6 @@ class Seksi extends Model {
     protected $fillable = [
         'bidang_id',
         'nama_seksi',
-        'deskripsi',
-        'target_url',
-        'shortlink_code',
     ];
 
     // Relasi: Satu Seksi hanya milik satu Bidang

@@ -26,7 +26,6 @@ class BidangController extends Controller
     {
         $request->validate([
             'nama_bidang' => 'required|string|max:255|unique:bidang,nama_bidang',
-            'deskripsi' => 'nullable|string',
         ]);
 
         Bidang::create($request->all());
@@ -46,7 +45,6 @@ class BidangController extends Controller
     {
         $request->validate([
             'nama_bidang' => 'required|string|max:255|unique:bidang,nama_bidang,' . $bidang->id,
-            'deskripsi' => 'nullable|string',
         ]);
 
         $bidang->update($request->all());
