@@ -7,10 +7,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Dashboard default (untuk user biasa)
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -34,13 +36,15 @@ Route::get('/admin/dashboard', function () {
         ['nama' => 'Seksi 5', 'bidang' => 'Bidang E'],
     ];
 
-    // arahkan ke views/admin/dashboard.blade.php
     return view('admin.dashboard', compact('stats', 'seksi'));
 })->middleware(['auth'])->name('admin.dashboard');
 
-// Dashboard User (default pakai layouts.app)
-Route::get('/dashboard', function () {
-    return view('dashboard'); // ini ambil dari resources/views/dashboard.blade.php
-})->middleware(['auth'])->name('dashboard');
+Route::get('/shortlink', function () {
+    return view('shortlink');
+})->name('shortlink');
+
+Route::get('/microsite', function () {
+    return view('microsite');
+})->name('microsite');
 
 require __DIR__.'/auth.php';
