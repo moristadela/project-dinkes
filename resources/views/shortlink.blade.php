@@ -1,6 +1,6 @@
 @extends('layouts.shortlink')
 
-@section('content')
+@section(section: 'content')
 <div class="bg-blue-200 min-h-full flex flex-col items-center justify-center p-6">
     <!-- Background -->
     <div class="absolute inset-0">
