@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('bidang_id')->constrained('bidang')->onDelete('cascade');
             $table->string('nama_seksi');
             $table->text('deskripsi')->nullable();
-            $table->text('target_url'); // URL asli yang akan dituju
-            $table->string('shortlink_code', 10)->unique(); // Kode unik untuk shortlink
+            $table->text('target_url'); 
+            $table->string('shortlink_code', 10)->unique(); 
             $table->timestamps();
         });
     }

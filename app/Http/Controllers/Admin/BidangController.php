@@ -12,13 +12,13 @@ class BidangController extends Controller
     public function index()
     {
         $bidangs = Bidang::latest()->paginate(10);
-        return view('admin.bidang.index', compact('bidangs'));
+        return view('admin.dashboard', compact('bidang'));
     }
 
     // Menampilkan form untuk membuat bidang baru
     public function create()
     {
-        return view('admin.bidang.create');
+        return view('admin.create');
     }
 
     // Menyimpan bidang baru ke database
@@ -31,14 +31,14 @@ class BidangController extends Controller
 
         Bidang::create($request->all());
 
-        return redirect()->route('admin.bidang.index')
+        return redirect()->route('admin.dashboard')
                          ->with('success', 'Bidang berhasil ditambahkan.');
     }
 
     // Menampilkan form untuk mengedit bidang
     public function edit(Bidang $bidang)
     {
-        return view('admin.bidang.edit', compact('bidang'));
+        return view('admin.edit', compact('bidang'));
     }
 
     // Memperbarui data bidang di database
@@ -51,7 +51,7 @@ class BidangController extends Controller
 
         $bidang->update($request->all());
 
-        return redirect()->route('admin.bidang.index')
+        return redirect()->route('admin.dashboard')
                          ->with('success', 'Bidang berhasil diperbarui.');
     }
 
@@ -60,7 +60,7 @@ class BidangController extends Controller
     {
         $bidang->delete();
 
-        return redirect()->route('admin.bidang.index')
+        return redirect()->route('admin.dashboard')
                          ->with('success', 'Bidang berhasil dihapus.');
     }
 }
