@@ -10,12 +10,12 @@ use Illuminate\Support\Str; // Import Str untuk generate string acak
 
 class SeksiController extends Controller {
     public function index() {
-        $seksis = Seksi::with('bidang')->latest()->paginate(10);
+        $seksi = Seksi::with('bidang')->latest()->paginate(10);
         return view('admin.seksi.index', compact('seksi'));
     }
 
     public function create() {
-        $bidangs = Bidang::orderBy('nama_bidang')->get(); // Ambil semua bidang untuk dropdown
+        $bidang = Bidang::orderBy('nama_bidang')->get(); // Ambil semua bidang untuk dropdown
         return view('admin.seksi.create', compact('bidang'));
     }
 
@@ -34,7 +34,7 @@ class SeksiController extends Controller {
     }
 
     public function edit(Seksi $seksi) {
-        $bidangs = Bidang::orderBy('nama_bidang')->get();
+        $bidang = Bidang::orderBy('nama_bidang')->get();
         return view('admin.seksi.edit', compact('seksi', 'bidang'));
     }
 

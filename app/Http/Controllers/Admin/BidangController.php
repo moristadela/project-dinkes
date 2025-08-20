@@ -11,7 +11,7 @@ class BidangController extends Controller
     // Menampilkan daftar semua bidang
     public function index()
     {
-        $bidangs = Bidang::latest()->paginate(10);
+        $bidang = Bidang::latest()->paginate(10);
         return view('admin.dashboard', compact('bidang'));
     }
 

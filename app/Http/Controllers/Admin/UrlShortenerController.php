@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\UrlShortener;
+use App\Models\Url;
 use App\Models\Bidang;
 use App\Models\Seksi;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class UrlShortenerController extends Controller
     public function index()
     {
         // Ambil data dengan relasi bidang dan seksi untuk ditampilkan
-        $urls = UrlShortener::with(['bidang', 'seksi'])->latest()->paginate(10);
+        $urls = Url::with(['bidang', 'seksi'])->latest()->paginate(10);
         return view('admin.url.index', compact('urls'));
     }
 
@@ -26,9 +27,9 @@ class UrlShortenerController extends Controller
      */
     public function create()
     {
-        $bidangs = Bidang::orderBy('nama_bidang')->get();
-        $seksis = Seksi::orderBy('nama_seksi')->get();
-        return view('admin.url.create', compact('bidangs', 'seksis'));
+        $bidang = Bidang::orderBy('nama_bidang')->get();
+        $seksi = Seksi::orderBy('nama_seksi')->get();
+        return view('admin.url.create', compact('bidang', 'seksi'));
     }
 
     /**
@@ -40,7 +41,7 @@ class UrlShortenerController extends Controller
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
             'bidang_id' => 'required|exists:bidang,id',
-            'seksi_id' => 'required|exists:seksis,id',
+            'seksi_id' => 'required|exists:seksi,id',
         ]);
 
         UrlShortener::create([
@@ -60,9 +61,9 @@ class UrlShortenerController extends Controller
      */
     public function edit(UrlShortener $url)
     {
-        $bidangs = Bidang::orderBy('nama_bidang')->get();
-        $seksis = Seksi::orderBy('nama_seksi')->get();
-        return view('admin.url.edit', compact('url', 'bidangs', 'seksis'));
+        $bidang = Bidang::orderBy('nama_bidang')->get();
+        $seksi = Seksi::orderBy('nama_seksi')->get();
+        return view('admin.url.edit', compact('url', 'bidang', 'seksi'));
     }
 
     /**
@@ -74,7 +75,7 @@ class UrlShortenerController extends Controller
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
             'bidang_id' => 'required|exists:bidang,id',
-            'seksi_id' => 'required|exists:seksis,id',
+            'seksi_id' => 'required|exists:seksi,id',
         ]);
 
         $url->update($request->all());
