@@ -9,6 +9,8 @@ class Bidang extends Model
 {
     use HasFactory;
 
+    protected $table = 'bidang';
+
     // Tentukan kolom mana yang boleh diisi massal
     protected $fillable = [
         'nama_bidang',

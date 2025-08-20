@@ -19,7 +19,7 @@ class UrlShortenerController extends Controller
     {
         // Ambil data dengan relasi bidang dan seksi untuk ditampilkan
         $urls = Url::with(['bidang', 'seksi'])->latest()->paginate(10);
-        return view('admin.url.index', compact('urls'));
+        return view('admin.dashboard', compact('urls'));
     }
 
     /**
@@ -29,7 +29,7 @@ class UrlShortenerController extends Controller
     {
         $bidang = Bidang::orderBy('nama_bidang')->get();
         $seksi = Seksi::orderBy('nama_seksi')->get();
-        return view('admin.url.create', compact('bidang', 'seksi'));
+        return view('admin.create', compact('bidang', 'seksi'));
     }
 
     /**
@@ -52,7 +52,7 @@ class UrlShortenerController extends Controller
             'short_code' => Str::random(7), // Buat kode acak 7 karakter
         ]);
 
-        return redirect()->route('admin.url.index')
+        return redirect()->route('admin.dashboard')
                          ->with('success', 'URL berhasil ditambahkan.');
     }
 
@@ -63,7 +63,7 @@ class UrlShortenerController extends Controller
     {
         $bidang = Bidang::orderBy('nama_bidang')->get();
         $seksi = Seksi::orderBy('nama_seksi')->get();
-        return view('admin.url.edit', compact('url', 'bidang', 'seksi'));
+        return view('admin.edit', compact('url', 'bidang', 'seksi'));
     }
 
     /**
@@ -80,7 +80,7 @@ class UrlShortenerController extends Controller
 
         $url->update($request->all());
 
-        return redirect()->route('admin.url.index')
+        return redirect()->route('admin.dashboard')
                          ->with('success', 'URL berhasil diperbarui.');
     }
 
@@ -90,7 +90,7 @@ class UrlShortenerController extends Controller
     public function destroy(UrlShortener $url)
     {
         $url->delete();
-        return redirect()->route('admin.url.index')
+        return redirect()->route('admin.dashbord')
                          ->with('success', 'URL berhasil dihapus.');
     }
 }
