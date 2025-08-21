@@ -65,7 +65,7 @@
         <!-- Preview -->
         <div>
             <h3 class="text-lg font-semibold mb-4 text-green-700">Pratinjau Shortlink</h3>
-            <div class="bg-gradient-to-b from-green-100 to-green-200 p-8 rounded-2xl shadow-md flex flex-col items-center">
+            <div class="bg-gradient-to-b from-red-100 to-red-200 p-8 rounded-2xl shadow-md flex flex-col items-center">
                 <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" alt="Logo Dinkes" class="w-28 h-28 rounded-full shadow-lg mb-4">
                 <h4 class="text-xl font-bold text-gray-900 text-center">Dinas Kesehatan<br>Provinsi Jawa Tengah</h4>
                 <p class="text-gray-600 text-center mb-6">Kumpulan Shortlink Resmi</p>

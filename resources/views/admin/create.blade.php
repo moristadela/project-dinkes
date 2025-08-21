@@ -1,4 +1,4 @@
-<form action="{{ route('admin.url.store') }}" method="POST">
+<form action="{{ route('admin.urls.store') }}" method="POST">
     @csrf
 
     <label>Judul</label>

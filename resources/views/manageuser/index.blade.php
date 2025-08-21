@@ -25,7 +25,6 @@
                                 <th class="px-4 py-2 border">Nama</th>
                                 <th class="px-4 py-2 border">Username</th>
                                 <th class="px-4 py-2 border">Role</th>
-                                <th class="px-4 py-2 border">Status</th>
                                 <th class="px-4 py-2 border text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -35,9 +34,6 @@
                                 <td class="px-4 py-2 border">Andi Wijaya</td>
                                 <td class="px-4 py-2 border">andi123</td>
                                 <td class="px-4 py-2 border">Admin</td>
-                                <td class="px-4 py-2 border">
-                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">Aktif</span>
-                                </td>
                                 <td class="px-4 py-2 border text-center space-x-2">
                                     <button class="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500">Edit</button>
                                     <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Hapus</button>
@@ -47,9 +43,6 @@
                                 <td class="px-4 py-2 border">Siti Lestari</td>
                                 <td class="px-4 py-2 border">siti001</td>
                                 <td class="px-4 py-2 border">User</td>
-                                <td class="px-4 py-2 border">
-                                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm">Nonaktif</span>
-                                </td>
                                 <td class="px-4 py-2 border text-center space-x-2">
                                     <button class="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500">Edit</button>
                                     <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Hapus</button>
@@ -82,14 +75,7 @@
                                     <option value="User">User</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="block text-sm font-medium">Status</label>
-                                <select class="w-full border rounded p-2">
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Nonaktif">Nonaktif</option>
-                                </select>
-                            </div>
-                            <div class="flex justify-end space-x-2">
+                             <div class="flex justify-end space-x-2">
                                 <button type="button" @click="openModal = false"
                                     class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Batal</button>
                                 <button type="submit"

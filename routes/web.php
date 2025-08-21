@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ADMIN AREA
+// ADMIN
 Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
@@ -30,18 +30,17 @@ Route::middleware(['auth'])
         Route::get('/dashboard', [UrlShortenerController::class, 'index'])->name('dashboard');
 
         // CRUD URL Shortener (otomatis bikin create, store, edit, update, destroy, dll)
-        Route::resource('url', UrlShortenerController::class)->names('url');
+        Route::resource('urls', UrlShortenerController::class)->names('urls');
     });
 
-// Shortlink umum
-Route::post('/shortlink/generate', [UrlShortenerController::class, 'generate'])
-    ->name('shortlink.generate');
+// Shortlink
+Route::get('/shortlink/index', [UrlShortenerController::class, 'generateForm'])->name('shortlink.index');
+Route::post('/shortlink/generate', [UrlShortenerController::class, 'generate'])->name('shortlink.generate');
+Route::post('/shortlink/save', [UrlShortenerController::class, 'save'])->name('shortlink.save');
 
-Route::get('/s/{short}', [UrlShortenerController::class, 'redirect'])
-    ->name('shortlink.redirect');
 
 // Halaman statis lain
 Route::view('/microsite/index', 'microsite.index')->name('microsite.index');
-Route::view('/managementuser', 'managementuser')->name('managementuser');
+Route::view('/manageuser/index', 'manageuser.index')->name('manageuser.index');
 
 require __DIR__.'/auth.php';

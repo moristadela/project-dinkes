@@ -50,7 +50,7 @@ class UrlShortenerController extends Controller
             'original_url' => $request->original_url,
             'bidang_id' => $request->bidang_id,
             'seksi_id' => $request->seksi_id,
-            'short_url' => Str::random(7), // Buat kode acak 7 karakter
+            'short_url' => Str::random(7),
         ]);
 
         return redirect()->route('admin.dashboard')
@@ -92,6 +92,42 @@ class UrlShortenerController extends Controller
     {
         $url->delete();
         return redirect()->route('admin.dashboard')
-                         ->with('success', 'URL berhasil dihapus.');
+           
+        ->with('success', 'URL berhasil dihapus.');
     }
+
+        public function generateForm()
+    {
+        return view('shortlink.index'); // view untuk form
+    }
+
+    public function generate(Request $request)
+    {
+        $request->validate([
+            'original_url' => 'required|url'
+        ]);
+
+        // bikin shortlink random
+        $short = Str::random(7);
+
+        // simpan ke database
+        $url = \App\Models\Url::create([
+            'title' => 'Generated Shortlink',
+            'original_url' => $request->original_url,
+            'short_url' => $short,
+            'bidang_id' => 1, // sementara dummy, nanti bisa pilih
+            'seksi_id' => 1   // sementara dummy
+        ]);
+
+            return back()->with('short_url', url($short));
+    }
+
+    public function save(Request $request)
+    {
+        // logika penyimpanan tambahan (kalau perlu update title/bidang/seksi)
+        return redirect()->route('shortlink.index')->with('success', 'Shortlink berhasil disimpan!');
+    }
+
+
+
 }
