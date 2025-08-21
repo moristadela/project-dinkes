@@ -7,7 +7,7 @@
     <div class="bg-white shadow-sm rounded-lg p-4 py-2">
 
         <div x-data="{ open: false }" class="flex justify-between items-center mb-4">
-            <a href="{{ route('admin.url.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+            <a href="#" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
                 New
             </a>
 

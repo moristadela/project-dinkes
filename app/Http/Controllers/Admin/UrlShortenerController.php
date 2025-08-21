@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\UrlShortener;
 use App\Models\Url;
 use App\Models\Bidang;
 use App\Models\Seksi;
@@ -27,9 +26,11 @@ class UrlShortenerController extends Controller
      */
     public function create()
     {
-        $bidang = Bidang::orderBy('nama_bidang')->get();
-        $seksi = Seksi::orderBy('nama_seksi')->get();
+        $bidang = Bidang::all();
+        $seksi  = Seksi::all();
+
         return view('admin.create', compact('bidang', 'seksi'));
+    
     }
 
     /**
@@ -44,12 +45,12 @@ class UrlShortenerController extends Controller
             'seksi_id' => 'required|exists:seksi,id',
         ]);
 
-        UrlShortener::create([
+        Url::create([
             'title' => $request->title,
             'original_url' => $request->original_url,
             'bidang_id' => $request->bidang_id,
             'seksi_id' => $request->seksi_id,
-            'short_code' => Str::random(7), // Buat kode acak 7 karakter
+            'short_url' => Str::random(7), // Buat kode acak 7 karakter
         ]);
 
         return redirect()->route('admin.dashboard')
@@ -59,7 +60,7 @@ class UrlShortenerController extends Controller
     /**
      * Menampilkan form untuk mengedit URL.
      */
-    public function edit(UrlShortener $url)
+    public function edit(Url $url)
     {
         $bidang = Bidang::orderBy('nama_bidang')->get();
         $seksi = Seksi::orderBy('nama_seksi')->get();
@@ -69,7 +70,7 @@ class UrlShortenerController extends Controller
     /**
      * Memperbarui data URL di database.
      */
-    public function update(Request $request, UrlShortener $url)
+    public function update(Request $request, Url $url)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -87,10 +88,10 @@ class UrlShortenerController extends Controller
     /**
      * Menghapus URL dari database.
      */
-    public function destroy(UrlShortener $url)
+    public function destroy(Url $url)
     {
         $url->delete();
-        return redirect()->route('admin.dashbord')
+        return redirect()->route('admin.dashboard')
                          ->with('success', 'URL berhasil dihapus.');
     }
 }
