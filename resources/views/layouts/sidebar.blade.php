@@ -16,11 +16,11 @@
                 <span x-text="openUser ? '▲' : '▼'"></span>
             </button>
             <div x-show="openUser" x-cloak class="ml-4 mt-1 space-y-1">
-                <a href="#" class="block px-3 py-1 rounded hover:bg-blue-100 transition duration-150">Bidang</a>
-                <a href="#" class="block px-3 py-1 rounded hover:bg-blue-100 transition duration-150">Seksi</a>
+                <a href="admin.bidang.index" class="block px-3 py-1 rounded hover:bg-blue-100 transition duration-150">Bidang</a>
+                <a href="admin.seksi.index" class="block px-3 py-1 rounded hover:bg-blue-100 transition duration-150">Seksi</a>
             </div>
         </div>
 
-        <a href="{{ route('manageuser.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">User Management</a>
+        <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">User Management</a>
     </nav>
 </aside>

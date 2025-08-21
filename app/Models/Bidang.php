@@ -21,4 +21,10 @@ class Bidang extends Model
     {
         return $this->hasMany(Seksi::class);
     }
+
+    public function urls()
+    {
+        return $this->hasMany(Url::class, 'bidang_id');
+    }
+
 }

@@ -3,7 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UrlShortenerController;
-use App\Models\Url;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BidangController;
+use App\Http\Controllers\Admin\SeksiController;
+use App\Http\Controllers\Admin\UserController;
 
 // Halaman awal
 Route::get('/', fn () => view('welcome'));
@@ -20,17 +23,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ADMIN
+// Grup Rute Admin (disatukan)
 Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-        // Admin Dashboard (pakai controller supaya data selalu ada)
+        // Admin Dashboard (Menggunakan UserController untuk menampilkan daftar URL)
         Route::get('/dashboard', [UrlShortenerController::class, 'index'])->name('dashboard');
 
-        // CRUD URL Shortener (otomatis bikin create, store, edit, update, destroy, dll)
+        // CRUD URL Shortener
         Route::resource('urls', UrlShortenerController::class)->names('urls');
+
+        // Management User
+        Route::resource('users', UserController::class)->names('users');
+
+        // Daftar Bidang & Seksi
+        Route::resource('bidang', BidangController::class);
+        Route::resource('seksi', SeksiController::class); 
     });
 
 // Shortlink
@@ -38,9 +48,7 @@ Route::get('/shortlink/index', [UrlShortenerController::class, 'generateForm'])-
 Route::post('/shortlink/generate', [UrlShortenerController::class, 'generate'])->name('shortlink.generate');
 Route::post('/shortlink/save', [UrlShortenerController::class, 'save'])->name('shortlink.save');
 
-
-// Halaman statis lain
+// Microsite
 Route::view('/microsite/index', 'microsite.index')->name('microsite.index');
-Route::view('/manageuser/index', 'manageuser.index')->name('manageuser.index');
 
 require __DIR__.'/auth.php';

@@ -34,14 +34,12 @@ class Url extends Model
      */
     public function bidang()
     {
-        return $this->belongsTo(Bidang::class);
+        return $this->belongsTo(Bidang::class, 'bidang_id');
     }
 
-    /**
-     * Mendapatkan data seksi yang memiliki URL ini.
-     */
     public function seksi()
     {
-        return $this->belongsTo(Seksi::class);
+        return $this->belongsTo(Seksi::class, 'seksi_id');
     }
+
 }

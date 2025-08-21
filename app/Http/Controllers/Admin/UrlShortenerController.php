@@ -18,7 +18,12 @@ class UrlShortenerController extends Controller
     {
         // Ambil data dengan relasi bidang dan seksi untuk ditampilkan
         $urls = Url::with(['bidang', 'seksi'])->latest()->paginate(10);
-        return view('admin.dashboard', compact('urls'));
+        
+        // Mengambil data bidang dan seksi untuk form modal di dashboard
+        $bidang = Bidang::all();
+        $seksi  = Seksi::all();
+
+        return view('admin.urls.index', compact('urls', 'bidang', 'seksi'));
     }
 
     /**
@@ -29,7 +34,7 @@ class UrlShortenerController extends Controller
         $bidang = Bidang::all();
         $seksi  = Seksi::all();
 
-        return view('admin.create', compact('bidang', 'seksi'));
+        return view('admin.urls.create', compact('bidang', 'seksi'));
     
     }
 
@@ -53,7 +58,7 @@ class UrlShortenerController extends Controller
             'short_url' => Str::random(7),
         ]);
 
-        return redirect()->route('admin.dashboard')
+        return redirect()->route('admin.urls.index')
                          ->with('success', 'URL berhasil ditambahkan.');
     }
 
@@ -64,7 +69,7 @@ class UrlShortenerController extends Controller
     {
         $bidang = Bidang::orderBy('nama_bidang')->get();
         $seksi = Seksi::orderBy('nama_seksi')->get();
-        return view('admin.edit', compact('url', 'bidang', 'seksi'));
+        return view('admin.urls.edit', compact('url', 'bidang', 'seksi'));
     }
 
     /**
@@ -81,7 +86,7 @@ class UrlShortenerController extends Controller
 
         $url->update($request->all());
 
-        return redirect()->route('admin.dashboard')
+        return redirect()->route('admin.urls.index')
                          ->with('success', 'URL berhasil diperbarui.');
     }
 
@@ -91,12 +96,11 @@ class UrlShortenerController extends Controller
     public function destroy(Url $url)
     {
         $url->delete();
-        return redirect()->route('admin.dashboard')
-           
-        ->with('success', 'URL berhasil dihapus.');
+        return redirect()->route('admin.urls.index')
+                         ->with('success', 'URL berhasil dihapus.');
     }
 
-        public function generateForm()
+    public function generateForm()
     {
         return view('shortlink.index'); // view untuk form
     }
@@ -119,7 +123,7 @@ class UrlShortenerController extends Controller
             'seksi_id' => 1   // sementara dummy
         ]);
 
-            return back()->with('short_url', url($short));
+        return back()->with('short_url', url($short));
     }
 
     public function save(Request $request)
@@ -127,7 +131,4 @@ class UrlShortenerController extends Controller
         // logika penyimpanan tambahan (kalau perlu update title/bidang/seksi)
         return redirect()->route('shortlink.index')->with('success', 'Shortlink berhasil disimpan!');
     }
-
-
-
 }

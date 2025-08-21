@@ -8,20 +8,26 @@ use Illuminate\Http\Request;
 
 class BidangController extends Controller
 {
-    // Menampilkan daftar semua bidang
+    /**
+     * Menampilkan daftar semua bidang.
+     */
     public function index()
     {
-        $bidang = Bidang::latest()->paginate(10);
-        return view('admin.dashboard', compact('bidang'));
+        $bidang = \App\Models\Bidang::all();
+        return view('admin.bidang.index', compact('bidang'));
     }
 
-    // Menampilkan form untuk membuat bidang baru
+    /**
+     * Menampilkan form untuk membuat bidang baru.
+     */
     public function create()
     {
         return view('admin.create');
     }
 
-    // Menyimpan bidang baru ke database
+    /**
+     * Menyimpan bidang baru ke database.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -34,13 +40,17 @@ class BidangController extends Controller
                          ->with('success', 'Bidang berhasil ditambahkan.');
     }
 
-    // Menampilkan form untuk mengedit bidang
+    /**
+     * Menampilkan form untuk mengedit bidang.
+     */
     public function edit(Bidang $bidang)
     {
         return view('admin.edit', compact('bidang'));
     }
 
-    // Memperbarui data bidang di database
+    /**
+     * Memperbarui data bidang di database.
+     */
     public function update(Request $request, Bidang $bidang)
     {
         $request->validate([
@@ -53,12 +63,25 @@ class BidangController extends Controller
                          ->with('success', 'Bidang berhasil diperbarui.');
     }
 
-    // Menghapus bidang dari database
+    /**
+     * Menghapus bidang dari database.
+     */
     public function destroy(Bidang $bidang)
     {
         $bidang->delete();
 
         return redirect()->route('admin.dashboard')
                          ->with('success', 'Bidang berhasil dihapus.');
+    }
+
+    /**
+     * Menampilkan detail bidang + daftar URL.
+     */
+    public function show(Bidang $bidang)
+    {
+        // ambil bidang beserta urls & seksi
+        $bidang->load('urls.seksi');
+
+        return view('admin.bidang', compact('bidang'));
     }
 }
