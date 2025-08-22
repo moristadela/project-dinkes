@@ -13,7 +13,7 @@ class BidangController extends Controller
      */
     public function index()
     {
-        $bidang = \App\Models\Bidang::all();
+        $bidang = Bidang::all(); // Mengambil semua data Bidang
         return view('admin.bidang.index', compact('bidang'));
     }
 
@@ -22,7 +22,7 @@ class BidangController extends Controller
      */
     public function create()
     {
-        return view('admin.create');
+        return view('admin.bidang.create');
     }
 
     /**
@@ -31,13 +31,12 @@ class BidangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_bidang' => 'required|string|max:255|unique:bidang,nama_bidang',
+            'nama_bidang' => 'required|string|max:255',
         ]);
 
         Bidang::create($request->all());
 
-        return redirect()->route('admin.dashboard')
-                         ->with('success', 'Bidang berhasil ditambahkan.');
+        return redirect()->route('admin.bidang.index')->with('success', 'Bidang berhasil dibuat.');
     }
 
     /**
@@ -45,7 +44,7 @@ class BidangController extends Controller
      */
     public function edit(Bidang $bidang)
     {
-        return view('admin.edit', compact('bidang'));
+        return view('admin.bidang.edit', compact('bidang'));
     }
 
     /**
@@ -54,13 +53,12 @@ class BidangController extends Controller
     public function update(Request $request, Bidang $bidang)
     {
         $request->validate([
-            'nama_bidang' => 'required|string|max:255|unique:bidang,nama_bidang,' . $bidang->id,
+            'nama_bidang' => 'required|string|max:255',
         ]);
 
         $bidang->update($request->all());
 
-        return redirect()->route('admin.dashboard')
-                         ->with('success', 'Bidang berhasil diperbarui.');
+        return redirect()->route('admin.bidang.index')->with('success', 'Bidang berhasil diperbarui.');
     }
 
     /**
@@ -69,19 +67,6 @@ class BidangController extends Controller
     public function destroy(Bidang $bidang)
     {
         $bidang->delete();
-
-        return redirect()->route('admin.dashboard')
-                         ->with('success', 'Bidang berhasil dihapus.');
-    }
-
-    /**
-     * Menampilkan detail bidang + daftar URL.
-     */
-    public function show(Bidang $bidang)
-    {
-        // ambil bidang beserta urls & seksi
-        $bidang->load('urls.seksi');
-
-        return view('admin.bidang', compact('bidang'));
+        return redirect()->route('admin.bidang.index')->with('success', 'Bidang berhasil dihapus.');
     }
 }

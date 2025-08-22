@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="text-center mb-10">
         <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" alt="Logo Dinkes Jateng" class="h-20 mx-auto mb-4">
-        <h1 class="text-3xl font-bold text-gray-800">Aplikasi Pemendek URL</h1>
+        <h1 class="text-3xl font-bold text-gray-800">URL Shortener</h1>
         <p class="text-gray-600">Dinas Kesehatan Provinsi Jawa Tengah</p>
     </div>
 

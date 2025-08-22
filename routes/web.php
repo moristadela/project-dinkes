@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UrlShortenerController;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BidangController;
 use App\Http\Controllers\Admin\SeksiController;
 use App\Http\Controllers\Admin\UserController;

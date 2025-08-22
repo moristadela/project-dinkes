@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Seksi;
-use App\Models\Bidang;
+use App\Models\Bidang; // Pastikan model Bidang di-import
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -12,7 +12,7 @@ class SeksiController extends Controller
 {
     public function index()
     {
-        $seksi = Seksi::all();
+        $seksi = Seksi::with('bidang')->get(); // Mengambil relasi bidang
         return view('admin.seksi.index', compact('seksi'));
     }
 
@@ -39,7 +39,6 @@ class SeksiController extends Controller
 
     public function edit(Seksi $seksi)
     {
-        // Pastikan model Seksi ditemukan, jika tidak, akan mengembalikan 404 secara otomatis
         $bidang = Bidang::orderBy('nama_bidang')->get();
         return view('admin.seksi.edit', compact('seksi', 'bidang'));
     }
