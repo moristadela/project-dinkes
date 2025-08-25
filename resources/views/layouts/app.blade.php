@@ -13,13 +13,14 @@
     {{-- Navbar --}}
     @include('layouts.navbar')
 
+    {{-- Flex container for sidebar and main content --}}
     <div class="flex flex-1">
 
         {{-- Sidebar --}}
         @include('layouts.sidebar')
 
-        {{-- Main Content --}}
-        <main class="flex-1 p-6 bg-gray-50">
+        {{-- Main Content - Menggunakan flex-1 untuk mengisi sisa ruang --}}
+        <main class="flex-1 p-6 bg-gray-50 overflow-y-auto">
             @yield('content')
         </main>
 

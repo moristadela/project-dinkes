@@ -24,33 +24,41 @@
             <table class="min-w-full border border-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nama Seksi</th>
-                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Bidang</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($seksi as $s)
                         <tr>
+                            <td class="px-4 py-2 text-sm text-gray-700">{{ $s->id }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $s->nama_seksi }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">{{ $s->bidang->nama_bidang ?? 'Tidak ada Bidang' }}</td>
                             <td class="px-4 py-2 text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     <a href="{{ route('admin.seksi.edit', $s->id) }}"
                                         class="inline-flex items-center justify-center w-8 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                                        title="Edit">✏️</a>
+                                        title="Edit">
+                                        ✏️
+                                    </a>
                                     <form action="{{ route('admin.seksi.destroy', $s->id) }}" method="POST"
                                         onsubmit="return confirm('Yakin hapus data ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
                                             class="inline-flex items-center justify-center w-8 h-8 bg-red-600 text-white rounded hover:bg-red-700"
-                                            title="Hapus">🗑</button>
+                                            title="Hapus">
+                                            🗑
+                                        </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="2" class="px-4 py-6 text-center text-sm text-gray-500">Belum ada data.</td>
+                            <td colspan="4" class="px-4 py-6 text-center text-sm text-gray-500">Belum ada data.</td>
                         </tr>
                     @endforelse
                 </tbody>

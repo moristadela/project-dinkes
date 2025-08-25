@@ -18,12 +18,18 @@ class UrlShortenerController extends Controller
     {
         // Ambil data dengan relasi bidang dan seksi untuk ditampilkan
         $urls = Url::with(['bidang', 'seksi'])->latest()->paginate(10);
+
+        // Mengambil total shortlink dan microsite untuk kartu (cards)
+        $totalUrls = Url::count();
+        // Anda mungkin memiliki model terpisah untuk microsites,
+        // jadi ganti dengan 'Microsite::count()' jika ada.
+        // $totalMicrosites = 15; // Dummy data sementara
         
         // Mengambil data bidang dan seksi untuk form modal di dashboard
         $bidang = Bidang::all();
         $seksi  = Seksi::all();
 
-        return view('admin.urls.index', compact('urls', 'bidang', 'seksi'));
+        return view('admin.urls.index', compact('urls', 'bidang', 'seksi', 'totalUrls'));
     }
 
     /**
