@@ -13,9 +13,6 @@
                     <p class="text-2xl font-bold text-blue-600">{{ $totalUrls }}</p>
                 </div>
                 <div class="text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M11 15H13V17H11V15ZM11 7H13V13H11V7ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z"></path>
-                    </svg>
                 </div>
             </div>
 
@@ -26,9 +23,6 @@
                     <p class="text-2xl font-bold text-green-600">#</p>
                 </div>
                 <div class="text-green-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M21 3H3C1.895 3 1 3.895 1 5V19C1 20.105 1.895 21 3 21H21C22.105 21 23 20.105 23 19V5C23 3.895 22.105 3 21 3ZM3 5H21V19H3V5ZM5 7H19V9H5V7ZM5 11H19V13H5V11ZM5 15H15V17H5V15Z"></path>
-                    </svg>
                 </div>
             </div>
         </div>

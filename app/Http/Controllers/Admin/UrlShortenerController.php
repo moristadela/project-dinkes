@@ -108,8 +108,10 @@ class UrlShortenerController extends Controller
 
     public function generateForm()
     {
-        return view('shortlink.index'); // view untuk form
+        $urls = Url::latest()->get(); // ambil semua data url
+        return view('shortlink.index', compact('urls'));
     }
+
 
     public function generate(Request $request)
     {
@@ -137,4 +139,16 @@ class UrlShortenerController extends Controller
         // logika penyimpanan tambahan (kalau perlu update title/bidang/seksi)
         return redirect()->route('shortlink.index')->with('success', 'Shortlink berhasil disimpan!');
     }
+
+    public function redirectToOriginal($short_url)
+    {
+        $url = Url::where('short_url', $short_url)->first();
+
+        if (! $url) {
+            abort(404, 'Shortlink tidak ditemukan.');
+        }
+
+        return redirect()->away($url->original_url);
+}
+
 }
