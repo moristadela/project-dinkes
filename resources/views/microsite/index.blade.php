@@ -15,7 +15,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-10">
         <h2 class="text-3xl font-bold text-gray-800"> Buat Microsite Baru</h2>
-        <a href="{{ route('microsite.index') }}" 
+        <a href="{{ route('admin.microsites.index') }}" 
            class="px-5 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 text-sm font-medium">
            ← Kembali
         </a>
@@ -113,3 +113,61 @@
     </div>
 </div>
 @endsection
+
+@extends('layouts.app')
+
+@section('content')
+<div class="max-w-6xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Daftar Microsite</h1>
+        <a href="{{ route('admin.microsites.create') }}" 
+           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            + Buat Microsite Baru
+        </a>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full border border-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">ID</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">Shortlink</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">Judul</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">Bidang</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">Seksi</th>
+                    <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700 border-b">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($microsites as $m)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 border-b">{{ $m->id }}</td>
+                        <td class="px-4 py-2 border-b text-blue-600">{{ $m->shortlink }}</td>
+                        <td class="px-4 py-2 border-b">{{ $m->title }}</td>
+                        <td class="px-4 py-2 border-b">{{ $m->bidang }}</td>
+                        <td class="px-4 py-2 border-b">{{ $m->seksi }}</td>
+                        <td class="px-4 py-2 border-b text-center">
+                            <a href="{{ route('admin.microsites.edit', $m->id) }}" 
+                               class="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-sm">Edit</a>
+                            <form action="{{ route('admin.microsites.destroy', $m->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                                        onclick="return confirm('Yakin hapus microsite ini?')">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-4 text-center text-gray-500">Belum ada microsite</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
+

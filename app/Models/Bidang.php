@@ -27,4 +27,6 @@ class Bidang extends Model
         return $this->hasMany(Url::class, 'bidang_id');
     }
 
+    
+
 }

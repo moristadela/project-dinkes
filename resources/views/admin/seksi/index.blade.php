@@ -38,19 +38,21 @@
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $s->bidang->nama_bidang ?? 'Tidak ada Bidang' }}</td>
                             <td class="px-4 py-2 text-center">
                                 <div class="flex items-center justify-center gap-2">
+                                    {{-- Button Edit --}}
                                     <a href="{{ route('admin.seksi.edit', $s->id) }}"
-                                        class="inline-flex items-center justify-center w-8 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                        class="inline-flex items-center justify-center w-14 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                                         title="Edit">
-                                        ✏️
+                                        Edit
                                     </a>
+                                    {{-- Button Delete --}}
                                     <form action="{{ route('admin.seksi.destroy', $s->id) }}" method="POST"
                                         onsubmit="return confirm('Yakin hapus data ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="inline-flex items-center justify-center w-8 h-8 bg-red-600 text-white rounded hover:bg-red-700"
+                                            class="inline-flex items-center justify-center w-14 h-8 bg-red-600 text-white rounded hover:bg-red-700"
                                             title="Hapus">
-                                            🗑
+                                            Delete
                                         </button>
                                     </form>
                                 </div>

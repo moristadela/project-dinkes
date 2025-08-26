@@ -37,20 +37,23 @@
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $b->nama_bidang }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $b->seksi->count() }}</td>
                             <td class="px-4 py-2 text-center">
+                                {{-- Button Edit --}}
                                 <div class="flex items-center justify-center gap-2">
                                     <a href="{{ route('admin.bidang.edit', $b->id) }}"
-                                        class="inline-flex items-center justify-center w-8 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                        class="inline-flex items-center justify-center w-14 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                                         title="Edit">
-                                        ✏️
+                                        Edit
                                     </a>
+
+                                {{-- Button Delete --}}
                                     <form action="{{ route('admin.bidang.destroy', $b->id) }}" method="POST"
                                         onsubmit="return confirm('Yakin hapus data ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="inline-flex items-center justify-center w-8 h-8 bg-red-600 text-white rounded hover:bg-red-700"
+                                            class="inline-flex items-center justify-center w-14 h-8 bg-red-600 text-white rounded hover:bg-red-700"
                                             title="Hapus">
-                                            🗑
+                                            Delete
                                         </button>
                                     </form>
                                 </div>

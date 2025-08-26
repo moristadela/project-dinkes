@@ -75,15 +75,11 @@
                                 <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->updated_at->format('Y-m-d') }}</td>
                                 <td class="px-4 py-2">
                                     <div class="flex items-center justify-center gap-2">
-                                        {{-- Show (opsional, kalau pakai resource show) --}}
-                                        <a href="{{ route('admin.urls.show', $url->id) }}"
-                                            class="inline-flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                            title="Detail">👁</a>
-
+   
                                         {{-- Edit --}}
                                         <a href="{{ route('admin.urls.edit', $url->id) }}"
-                                            class="inline-flex items-center justify-center w-8 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                                            title="Edit">✏️</a>
+                                            class="inline-flex items-center justify-center w-14 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                            title="Edit">Edit</a>
 
                                         {{-- Delete --}}
                                         <form action="{{ route('admin.urls.destroy', $url->id) }}" method="POST"
@@ -91,8 +87,8 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="inline-flex items-center justify-center w-8 h-8 bg-red-600 text-white rounded hover:bg-red-700"
-                                                title="Hapus">🗑</button>
+                                                class="inline-flex items-center justify-center w-14 h-8 bg-red-600 text-white rounded hover:bg-red-700"
+                                                title="Hapus">Delete</button>
                                         </form>
                                     </div>
                                 </td>

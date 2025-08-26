@@ -37,12 +37,10 @@ class UrlShortenerController extends Controller
      */
     public function create()
     {
-        $bidang = Bidang::all();
-        $seksi  = Seksi::all();
-
-        return view('admin.urls.create', compact('bidang', 'seksi'));
-    
+        $bidang = \App\Models\Bidang::with(relations: 'seksi')->get();
+        return view('admin.urls.create', compact('bidang'));
     }
+
 
     /**
      * Menyimpan URL baru ke database.
@@ -149,6 +147,8 @@ class UrlShortenerController extends Controller
         }
 
         return redirect()->away($url->original_url);
-}
+    }
+
+    
 
 }

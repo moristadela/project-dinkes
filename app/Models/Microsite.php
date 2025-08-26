@@ -9,7 +9,7 @@ class Microsite extends Model
 {
     use HasFactory;
 
-    protected $table = 'microsite';
+    protected $table = 'microsites';
     /**
      * The attributes that are mass assignable.
      *

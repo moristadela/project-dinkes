@@ -6,7 +6,7 @@
     <nav class="p-4 space-y-2">
         <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Dashboard</a>
         <a href="{{ route('shortlink.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Shortlink</a>
-        <a href="{{ route('microsite.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Microsite</a>
+        <a href="{{ route('admin.microsites.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Microsite</a>
         
     {{-- Dropdown URLs --}}
     <div>

@@ -69,4 +69,6 @@ class BidangController extends Controller
         $bidang->delete();
         return redirect()->route('admin.bidang.index')->with('success', 'Bidang berhasil dihapus.');
     }
+
+    
 }

@@ -37,13 +37,13 @@
                                 <td class="px-4 py-2 border">{{ ucfirst($user->role) }}</td>
                                 <td class="px-4 py-2 border text-center space-x-2">
                                     <a href="{{ route('admin.users.edit', $user->id) }}" 
-                                    class="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500">Edit</a>
+                                    class="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500">Edit</a> 
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" onclick="return confirm('Yakin hapus user ini?')"
                                             class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
-                                            Hapus
+                                            Delete
                                         </button>
                                     </form>
                                 </td>
