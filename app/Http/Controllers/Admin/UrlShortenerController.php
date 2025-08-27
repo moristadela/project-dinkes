@@ -1,4 +1,5 @@
 <?php
+// FILE: App/Http/Controllers/Admin/UrlShortenerController.php
 
 namespace App\Http\Controllers\Admin;
 
@@ -6,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Url;
 use App\Models\Bidang;
 use App\Models\Seksi;
+use App\Models\Microsite; // Impor model Microsite
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -19,17 +21,17 @@ class UrlShortenerController extends Controller
         // Ambil data dengan relasi bidang dan seksi untuk ditampilkan
         $urls = Url::with(['bidang', 'seksi'])->latest()->paginate(10);
 
-        // Mengambil total shortlink dan microsite untuk kartu (cards)
+        // Mengambil total shortlink
         $totalUrls = Url::count();
-        // Anda mungkin memiliki model terpisah untuk microsites,
-        // jadi ganti dengan 'Microsite::count()' jika ada.
-        // $totalMicrosites = 15; // Dummy data sementara
+        
+        // Mengambil total microsite dari model Microsite
+        $totalMicrosites = Microsite::count();
         
         // Mengambil data bidang dan seksi untuk form modal di dashboard
         $bidang = Bidang::all();
         $seksi  = Seksi::all();
 
-        return view('admin.urls.index', compact('urls', 'bidang', 'seksi', 'totalUrls'));
+        return view('admin.urls.index', compact('urls', 'bidang', 'seksi', 'totalUrls', 'totalMicrosites'));
     }
 
     /**
@@ -37,7 +39,8 @@ class UrlShortenerController extends Controller
      */
     public function create()
     {
-        $bidang = \App\Models\Bidang::with(relations: 'seksi')->get();
+        // PERBAIKAN: Menggunakan sintaks with() yang benar
+        $bidang = \App\Models\Bidang::with('seksi')->get();
         return view('admin.urls.create', compact('bidang'));
     }
 
@@ -63,7 +66,7 @@ class UrlShortenerController extends Controller
         ]);
 
         return redirect()->route('admin.urls.index')
-                         ->with('success', 'URL berhasil ditambahkan.');
+                             ->with('success', 'URL berhasil ditambahkan.');
     }
 
     /**
@@ -71,9 +74,10 @@ class UrlShortenerController extends Controller
      */
     public function edit(Url $url)
     {
-        $bidang = Bidang::orderBy('nama_bidang')->get();
-        $seksi = Seksi::orderBy('nama_seksi')->get();
-        return view('admin.urls.edit', compact('url', 'bidang', 'seksi'));
+        // PERBAIKAN: Mengambil semua data Bidang dengan relasi Seksi-nya
+        // Ini diperlukan agar dropdown seksi bisa dinamis di halaman edit
+        $allBidang = Bidang::with('seksi')->get();
+        return view('admin.urls.edit', compact('url', 'allBidang'));
     }
 
     /**
@@ -91,7 +95,7 @@ class UrlShortenerController extends Controller
         $url->update($request->all());
 
         return redirect()->route('admin.urls.index')
-                         ->with('success', 'URL berhasil diperbarui.');
+                             ->with('success', 'URL berhasil diperbarui.');
     }
 
     /**
@@ -101,7 +105,7 @@ class UrlShortenerController extends Controller
     {
         $url->delete();
         return redirect()->route('admin.urls.index')
-                         ->with('success', 'URL berhasil dihapus.');
+                             ->with('success', 'URL berhasil dihapus.');
     }
 
     public function generateForm()
@@ -148,7 +152,4 @@ class UrlShortenerController extends Controller
 
         return redirect()->away($url->original_url);
     }
-
-    
-
 }

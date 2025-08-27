@@ -4,29 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bidang extends Model
 {
     use HasFactory;
 
-    protected $table = 'bidang';
+    protected $table = 'bidang'; // Pastikan nama tabelnya benar
 
-    // Tentukan kolom mana yang boleh diisi massal
     protected $fillable = [
         'nama_bidang',
     ];
 
-    // Relasi: satu bidang memiliki banyak seksi
-    public function seksi()
+    /**
+     * Get the seksis for the bidang.
+     * Menggunakan eksplisit foreign key untuk keandalan.
+     */
+    public function seksi(): HasMany
     {
-        return $this->hasMany(Seksi::class);
+        return $this->hasMany(Seksi::class, 'bidang_id', 'id');
     }
-
-    public function urls()
-    {
-        return $this->hasMany(Url::class, 'bidang_id');
-    }
-
-    
-
 }

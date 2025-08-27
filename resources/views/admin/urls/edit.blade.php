@@ -1,7 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-6">
+<div class="max-w-4xl mx-auto p-6" 
+     x-data="{
+         // Inisialisasi data Alpine.js dengan nilai dari server
+         bidangId: '{{ old('bidang_id', $url->bidang_id) }}',
+         seksiId: '{{ old('seksi_id', $url->seksi_id) }}',
+         seksiList: [],
+         allBidang: {{ $allBidang->toJson() }}
+     }"
+     x-init="
+         // Gunakan $watch untuk bereaksi terhadap perubahan pada bidangId
+         $watch('bidangId', value => {
+             let bidang = allBidang.find(b => b.id == value);
+             seksiList = bidang ? bidang.seksi : [];
+             // Jika bidangId berubah, reset seksiId agar tidak ada pilihan yang salah
+             // unless the new bidang has the current seksi
+             if (seksiList.findIndex(s => s.id == seksiId) === -1) {
+                 seksiId = '';
+             }
+         });
+         // Panggil logika filter saat inisialisasi untuk memuat seksi awal
+         let initialBidang = allBidang.find(b => b.id == bidangId);
+         if (initialBidang) {
+             seksiList = initialBidang.seksi;
+         }
+     ">
+
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Edit URL</h1>
 
     <div class="bg-white shadow-md rounded-lg p-6">
@@ -29,26 +54,33 @@
 
             <div class="mb-4">
                 <label for="original_url" class="block text-sm font-medium text-gray-700">URL Asli</label>
-                <input type="url" name="original_url" id="original_url" value="{{ old('original_url', $url->original_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="https://contoh.com" required>
+                <input type="url" name="original_url" id="original_url" value="{{ old('original_url', $url->original_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="[https://contoh.com](https://contoh.com)" required>
             </div>
 
             <div class="mb-4">
                 <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
-                <select name="bidang_id" id="bidang_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+                <select name="bidang_id" id="bidang_id" 
+                        x-model="bidangId"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
                     <option value="">Pilih Bidang</option>
-                    @foreach($bidang as $b)
-                        <option value="{{ $b->id }}" {{ old('bidang_id', $url->bidang_id) == $b->id ? 'selected' : '' }}>{{ $b->nama_bidang }}</option>
-                    @endforeach
+                    <template x-for="b in allBidang" :key="b.id">
+                        <option :value="b.id" x-text="b.nama_bidang"></option>
+                    </template>
                 </select>
             </div>
 
             <div class="mb-4">
                 <label for="seksi_id" class="block text-sm font-medium text-gray-700">Seksi</label>
-                <select name="seksi_id" id="seksi_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+                <select name="seksi_id" id="seksi_id" 
+                        x-model="seksiId"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
                     <option value="">Pilih Seksi</option>
-                    @foreach($seksi as $s)
-                        <option value="{{ $s->id }}" {{ old('seksi_id', $url->seksi_id) == $s->id ? 'selected' : '' }}>{{ $s->nama_seksi }}</option>
-                    @endforeach
+                    <template x-if="seksiList.length === 0 && bidangId !== ''">
+                        <option value="" disabled>Tidak ada seksi</option>
+                    </template>
+                    <template x-for="s in seksiList" :key="s.id">
+                        <option :value="s.id" x-text="s.nama_seksi"></option>
+                    </template>
                 </select>
             </div>
 

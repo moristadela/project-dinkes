@@ -9,16 +9,20 @@ class Microsite extends Model
 {
     use HasFactory;
 
-    protected $table = 'microsites';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'shortlink',
         'title',
         'bidang',
         'seksi',
+        // Kolom 'links' dihilangkan karena sekarang disimpan di tabel terpisah
     ];
+
+    /**
+     * Relasi ke model DaftarLink
+     */
+    public function links()
+    {
+        return $this->hasMany(DaftarLink::class);
+    }
 }
+

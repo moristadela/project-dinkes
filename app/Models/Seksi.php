@@ -4,16 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Seksi extends Model
 {
     use HasFactory;
-    protected $table = 'seksi'; // Pastikan nama tabel benar
+    
+    protected $table = 'seksi'; // Pastikan nama tabelnya benar
     protected $guarded = ['id'];
     
-    // Relasi ke Bidang
-    public function bidang()
+    /**
+     * Relasi ke Bidang.
+     * Menggunakan eksplisit foreign key untuk keandalan.
+     */
+    public function bidang(): BelongsTo
     {
-        return $this->belongsTo(Bidang::class);
+        return $this->belongsTo(Bidang::class, 'bidang_id', 'id');
     }
 }

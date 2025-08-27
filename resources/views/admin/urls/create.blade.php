@@ -6,7 +6,11 @@
         bidangId: '',
         seksiList: [],
         allBidang: {{ $bidang->toJson() }}
-     }">
+     }"
+     x-effect="
+     let bidang = allBidang.find(b => b.id == bidangId);
+     seksiList = bidang ? bidang.seksi : [];
+     ">
 
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Buat URL Baru</h1>
 
@@ -37,16 +41,14 @@
                 <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
                 <select name="bidang_id" id="bidang_id" 
                         x-model="bidangId"
-                        @change="
-                            let bidang = allBidang.find(b => b.id == bidangId);
-                            seksiList = bidang ? bidang.seksi : [];
-                        "
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+                        class="mt-1 block w-full ...">
                     <option value="">Pilih Bidang</option>
                     <template x-for="b in allBidang" :key="b.id">
                         <option :value="b.id" x-text="b.nama_bidang"></option>
                     </template>
                 </select>
+
+
                 @error('bidang_id')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror

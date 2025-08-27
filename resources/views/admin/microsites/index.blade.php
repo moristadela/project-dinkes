@@ -3,71 +3,90 @@
 @section('content')
 <div class="max-w-7xl mx-auto py-10 px-6">
 
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-10">
+    <!-- Header and Button -->
+    <div class="flex justify-between items-center mb-6">
         <h2 class="text-3xl font-bold text-gray-800">Daftar Microsite</h2>
-        <a href="{{ route('admin.microsites.create') }}" 
-           class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium shadow-md">
+        <a href="{{ route('admin.microsites.create') }}"
+           class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium shadow-md transition-colors">
             + Buat Microsite Baru
         </a>
     </div>
 
-    <!-- Notifikasi Sukses -->
+    <!-- Success Notification -->
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
             <span class="block sm:inline">{{ session('success') }}</span>
         </div>
     @endif
 
-    <!-- Tampilan Daftar Microsite dalam bentuk Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse($microsites as $microsite)
-            <div class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100 flex flex-col justify-between">
-                <!-- Shortlink dan Judul -->
-                <div class="mb-4">
-                    <div class="text-sm text-gray-500 mb-1">
-                        Shortlink
-                    </div>
-                    <a href="/m/{{ $microsite->shortlink }}" target="_blank" 
-                       class="text-xl font-semibold text-blue-600 hover:text-blue-800 transition-colors">
-                        s.id/{{ $microsite->shortlink }}
-                    </a>
-                </div>
-
-                <!-- Informasi Detil -->
-                <div class="space-y-2 mb-4">
-                    <div>
-                        <div class="text-xs font-medium text-gray-500 uppercase">Judul</div>
-                        <div class="text-sm text-gray-900 font-medium">{{ $microsite->title }}</div>
-                    </div>
-                    <div>
-                        <div class="text-xs font-medium text-gray-500 uppercase">Bidang & Seksi</div>
-                        <div class="text-sm text-gray-600">{{ $microsite->bidang }} / {{ $microsite->seksi }}</div>
-                    </div>
-                </div>
-
-                <!-- Tanggal dan Aksi -->
-                <div class="flex justify-between items-center pt-4 border-t border-gray-100">
-                    <div class="text-xs text-gray-400">
-                        {{ $microsite->created_at->format('d M Y') }}
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <a href="{{ route('admin.microsites.edit', $microsite->id) }}" 
-                           class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">Edit</a>
-                        <form action="{{ route('admin.microsites.destroy', $microsite->id) }}" method="POST" 
-                              class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus microsite ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900 text-sm font-medium">Hapus</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="p-6 text-center text-gray-500 col-span-full">
-                Belum ada microsite yang dibuat.
-            </div>
-        @endforelse
+    <!-- Microsite Table -->
+    <div class="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-100">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Judul
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Shortlink
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Bidang / Seksi
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Tanggal Dibuat
+                        </th>
+                        <th scope="col" class="relative px-6 py-3">
+                            <span class="sr-only">Aksi</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($microsites as $microsite)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ $microsite->title }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                                <a href="/m/{{ $microsite->shortlink }}" target="_blank" class="hover:underline">
+                                    s.id/{{ $microsite->shortlink }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                {{ $microsite->bidang }} / {{ $microsite->seksi }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $microsite->created_at->format('d M Y') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex justify-end space-x-2">
+                                    <a href="{{ route('admin.microsites.edit', $microsite->id) }}"
+                                       class="text-indigo-600 hover:text-indigo-900">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('admin.microsites.destroy', $microsite->id) }}" method="POST"
+                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus microsite ini?');"
+                                          class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                Belum ada microsite yang dibuat.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection
