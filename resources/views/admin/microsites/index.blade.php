@@ -54,7 +54,7 @@
                                 </a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                {{ $microsite->bidang }} / {{ $microsite->seksi }}
+                                 {{ $microsite->bidang->nama_bidang ?? '-' }} / {{ $microsite->seksi->nama_seksi ?? '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $microsite->created_at->format('d M Y') }}

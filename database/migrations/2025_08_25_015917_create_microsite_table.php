@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('shortlink')->unique();
             $table->string('title');
-            $table->string('bidang');
-            $table->string('seksi');
+            $table->foreignId('bidang_id')->constrained('bidang')->onDelete('cascade');
+            $table->foreignId('seksi_id')->constrained('seksi')->onDelete('cascade');
             $table->timestamps();
         });
     }

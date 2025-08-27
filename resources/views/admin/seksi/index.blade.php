@@ -33,7 +33,7 @@
                 <tbody class="divide-y divide-gray-200">
                     @forelse($seksi as $s)
                         <tr>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $s->id }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">{{ $loop->iteration }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $s->nama_seksi }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $s->bidang->nama_bidang ?? 'Tidak ada Bidang' }}</td>
                             <td class="px-4 py-2 text-center">
