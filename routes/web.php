@@ -67,7 +67,11 @@ Route::prefix('shortlink')->name('shortlink.')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Redirect short URL (PENTING: rute ini harus diletakkan di bagian paling bawah
+// Rute untuk menampilkan microsite
+Route::get('/m/{shortlink}', [MicrositeController::class, 'show'])->name('microsite.show');
+
+// Redirect short URL
 Route::get('/{short_url}', [UrlShortenerController::class, 'redirectToOriginal'])
     ->where('short_url', '^(?!login$|register$|logout$|dashboard$)[A-Za-z0-9]+')
     ->name('shortlink.redirect');
+

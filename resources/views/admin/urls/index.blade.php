@@ -20,7 +20,7 @@
             <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-500">Total Microsite</h3>
-                    <p class="text-2xl font-bold text-green-600">#</p>
+                    <p class="text-2xl font-bold text-green-600">{{ $totalMicrosites }}</p>
                 </div>
                 <div class="text-green-600">
                 </div>

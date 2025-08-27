@@ -5,174 +5,140 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Bidang;
-use App\Models\Seksi;
-use App\Models\DaftarLink;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class MicrositeController extends Controller
 {
     /**
-     * Tampilkan daftar microsite
+     * Display a listing of the resource.
      */
     public function index()
     {
-        // Memuat microsite dengan link terkait untuk ditampilkan
-        $microsites = Microsite::with('links')->latest()->get();
+        $microsites = Microsite::with(['bidang', 'seksi'])->latest()->get();
         return view('admin.microsites.index', compact('microsites'));
     }
 
     /**
-     * Form tambah microsite
+     * Show the form for creating a new resource.
      */
     public function create()
     {
-        // Mengambil semua data Bidang dan Seksi yang terkait
         $allBidang = Bidang::with('seksi')->get();
-        // Mengirimkan data ke view
         return view('admin.microsites.create', compact('allBidang'));
     }
 
     /**
-     * Simpan microsite baru dan link-link-nya
+     * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
             'shortlink' => 'required|string|max:255|unique:microsites,shortlink',
-            'title'     => 'required|string|max:255',
-            'bidang'    => 'required|exists:bidangs,id',
-            'seksi'     => 'required|exists:seksis,id',
-            'links'     => 'nullable|array',
-            'links.*.title' => 'required|string|max:255',
-            'links.*.url'   => 'required|url',
+            'title' => 'required|string|max:255',
+            'bidang' => 'required|exists:bidang,id',
+            'seksi' => 'required|exists:seksi,id',
+            'links.*.title' => 'nullable|string|max:255',
+            'links.*.url' => 'nullable|url|max:255',
         ]);
-        
-        // Mengambil nama bidang dan seksi berdasarkan ID yang dikirimkan
-        $bidang = Bidang::find($request->bidang)->nama_bidang;
-        $seksi = Seksi::find($request->seksi)->nama_seksi;
 
-        DB::transaction(function () use ($request, $bidang, $seksi) {
-            // Menyimpan data microsite tanpa link terlebih dahulu
-            $microsite = Microsite::create([
-                'shortlink' => $request->shortlink,
-                'title'     => $request->title,
-                'bidang'    => $bidang,
-                'seksi'     => $seksi,
-            ]);
+        $microsite = new Microsite();
+        $microsite->shortlink = $request->shortlink;
+        $microsite->title = $request->title;
+        $microsite->bidang_id = $request->bidang;
+        $microsite->seksi_id = $request->seksi;
+        $microsite->save();
 
-            // Menyimpan setiap link ke tabel daftar_link dan mengaitkannya dengan microsite baru
-            if ($request->has('links')) {
-                foreach ($request->links as $linkData) {
+        if ($request->links) {
+            foreach ($request->links as $link) {
+                if ($link['title'] && $link['url']) {
                     $microsite->links()->create([
-                        'title'         => $linkData['title'],
-                        'original_link' => $linkData['url'], // Menggunakan 'original_link' sesuai skema DB
-                        'shortlink'     => $microsite->shortlink . '-' . uniqid(), // Membuat shortlink unik
+                        'title' => $link['title'],
+                        'original_link' => $link['url'],
                     ]);
                 }
             }
-        });
+        }
 
-        return redirect()->route('admin.microsites.index')
-                         ->with('success', 'Microsite berhasil dibuat.');
+        return redirect()->route('admin.microsites.index')->with('success', 'Microsite berhasil dibuat!');
     }
 
     /**
-     * Form edit microsite
+     * Display the specified resource.
+     */
+    public function show($shortlink)
+    {
+        // Memuat relasi 'bidang' dan 'seksi'
+        $microsite = Microsite::where('shortlink', $shortlink)
+                              ->with(['links', 'bidang', 'seksi'])
+                              ->firstOrFail();
+
+        return view('microsite.show', compact('microsite'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
      */
     public function edit(Microsite $microsite)
     {
-        // Memuat link terkait saat mengedit
-        $microsite->load('links');
-        // Mengambil semua data Bidang dan Seksi yang terkait
         $allBidang = Bidang::with('seksi')->get();
         return view('admin.microsites.edit', compact('microsite', 'allBidang'));
     }
 
     /**
-     * Update microsite
+     * Update the specified resource in storage.
      */
     public function update(Request $request, Microsite $microsite)
     {
         $request->validate([
-            'shortlink' => 'required|unique:microsites,shortlink,' . $microsite->id,
-            'title'     => 'required|string|max:255',
-            'bidang'    => 'required|exists:bidang,id',
-            'seksi'     => 'required|exists:seksi,id',
-            'links'     => 'nullable|array',
-            'links.*.title' => 'required|string|max:255',
-            'links.*.url'   => 'required|url',
-            'links.*.id'    => 'nullable|exists:daftar_link,id', // Validasi ID link
+            'shortlink' => 'required|string|max:255|unique:microsites,shortlink,' . $microsite->id,
+            'title' => 'required|string|max:255',
+            'bidang' => 'required|exists:bidang,id',
+            'seksi' => 'required|exists:seksi,id',
+            'links.*.title' => 'nullable|string|max:255',
+            'links.*.url' => 'nullable|url|max:255',
         ]);
 
-        $bidang = Bidang::find($request->bidang)->nama_bidang;
-        $seksi = Seksi::find($request->seksi)->nama_seksi;
+        $microsite->update([
+            'shortlink' => $request->shortlink,
+            'title' => $request->title,
+            'bidang_id' => $request->bidang,
+            'seksi_id' => $request->seksi,
+        ]);
 
-        DB::transaction(function () use ($request, $microsite, $bidang, $seksi) {
-            // Update data microsite
-            $microsite->update([
-                'shortlink' => $request->shortlink,
-                'title'     => $request->title,
-                'bidang'    => $bidang,
-                'seksi'     => $seksi,
-            ]);
+        // Delete existing links that are not in the request
+        $requestedLinkIds = collect($request->links)->pluck('id')->filter()->all();
+        $microsite->links()->whereNotIn('id', $requestedLinkIds)->delete();
 
-            $existingLinkIds = $microsite->links->pluck('id')->toArray();
-            $updatedLinkIds = collect($request->links)->pluck('id')->filter()->toArray();
-
-            // Hapus link yang tidak ada lagi di form
-            $linksToDelete = array_diff($existingLinkIds, $updatedLinkIds);
-            DaftarLink::destroy($linksToDelete);
-
-            // Perbarui atau tambahkan link baru
-            if ($request->has('links')) {
-                foreach ($request->links as $linkData) {
+        // Update or create new links
+        if ($request->links) {
+            foreach ($request->links as $linkData) {
+                if ($linkData['title'] && $linkData['url']) {
                     if (isset($linkData['id'])) {
-                        // Perbarui link yang sudah ada
-                        $link = DaftarLink::find($linkData['id']);
-                        if ($link) {
-                            $link->update([
-                                'title'         => $linkData['title'],
-                                'original_link' => $linkData['url'],
-                            ]);
-                        }
-                    } else {
-                        // Tambahkan link baru
-                        $microsite->links()->create([
-                            'title'         => $linkData['title'],
+                        // Update existing link
+                        $microsite->links()->where('id', $linkData['id'])->update([
+                            'title' => $linkData['title'],
                             'original_link' => $linkData['url'],
-                            'shortlink'     => $microsite->shortlink . '-' . uniqid(),
+                        ]);
+                    } else {
+                        // Create new link
+                        $microsite->links()->create([
+                            'title' => $linkData['title'],
+                            'original_link' => $linkData['url'],
                         ]);
                     }
                 }
             }
-        });
-
-        return redirect()->route('admin.microsites.index')
-                         ->with('success', 'Microsite berhasil diperbarui.');
+        }
+        
+        return redirect()->route('admin.microsites.index')->with('success', 'Microsite berhasil diperbarui!');
     }
 
     /**
-     * Hapus microsite
+     * Remove the specified resource from storage.
      */
     public function destroy(Microsite $microsite)
     {
-        // Penghapusan microsite akan menghapus link terkait secara otomatis (cascade delete)
         $microsite->delete();
-
-        return redirect()->route('admin.microsites.index')
-                         ->with('success', 'Microsite berhasil dihapus.');
-    }
-    
-    /**
-     * Tampilkan microsite berdasarkan shortlink
-     * Metode ini harus berada di controller yang terpisah dari Admin
-     */
-    public function show($shortlink)
-    {
-        // Memuat microsite dan link-link-nya
-        $microsite = Microsite::where('shortlink', $shortlink)->firstOrFail();
-        $microsite->load('links');
-        return view('microsites.show', compact('microsite'));
+        return redirect()->route('admin.microsites.index')->with('success', 'Microsite berhasil dihapus!');
     }
 }

@@ -139,10 +139,13 @@
                     </button>
                 </fieldset>
 
-                <!-- Submit Button -->
-                <div class="pt-6">
-                    <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors">
-                        Perbarui Microsite
+                <!-- Action Buttons -->
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="{{ route('admin.microsites.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-md text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                        Batal
+                    </a>
+                    <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition-colors">
+                        Perbarui
                     </button>
                 </div>
             </div>

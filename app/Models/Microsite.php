@@ -9,20 +9,39 @@ class Microsite extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'shortlink',
         'title',
-        'bidang',
-        'seksi',
-        // Kolom 'links' dihilangkan karena sekarang disimpan di tabel terpisah
+        'bidang_id',
+        'seksi_id',
     ];
 
     /**
-     * Relasi ke model DaftarLink
+     * Get the bidang that owns the microsite.
+     */
+    public function bidang()
+    {
+        return $this->belongsTo(Bidang::class, 'bidang_id');
+    }
+
+    /**
+     * Get the seksi that owns the microsite.
+     */
+    public function seksi()
+    {
+        return $this->belongsTo(Seksi::class, 'seksi_id');
+    }
+
+    /**
+     * Get the links for the microsite.
      */
     public function links()
     {
         return $this->hasMany(DaftarLink::class);
     }
 }
-
