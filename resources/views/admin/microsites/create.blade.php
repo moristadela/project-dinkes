@@ -51,7 +51,7 @@
                     <label for="title" class="block text-sm font-medium text-gray-700">Judul Microsite</label>
                     <input type="text" name="title" id="title"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('title') border-red-500 @enderror"
-                           placeholder="Contoh: Microsite Pelayanan Publik" value="{{ old('title') }}" required>
+                           value="{{ old('title') }}" required>
                     @error('title')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -118,13 +118,13 @@
                                     <label for="links[0][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                                     <input type="text" name="links[0][title]" id="links[0][title]"
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           placeholder="Contoh: WhatsApp">
+                                           >
                                 </div>
                                 <div class="flex-1">
                                     <label for="links[0][url]" class="block text-sm font-medium text-gray-700">URL</label>
                                     <input type="url" name="links[0][url]" id="links[0][url]"
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           placeholder="https://wa.me/...">
+                                           >
                                 </div>
                                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -190,13 +190,13 @@
                     <label for="links[${linkIndex}][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                     <input type="text" name="links[${linkIndex}][title]" id="links[${linkIndex}][title]"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           placeholder="Contoh: WhatsApp">
+                           >
                 </div>
                 <div class="flex-1">
                     <label for="links[${linkIndex}][url]" class="block text-sm font-medium text-gray-700">URL</label>
                     <input type="url" name="links[${linkIndex}][url]" id="links[${linkIndex}][url]"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           placeholder="https://wa.me/...">
+                           >
                 </div>
                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

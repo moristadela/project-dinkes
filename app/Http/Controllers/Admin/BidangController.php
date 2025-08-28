@@ -30,11 +30,11 @@ class BidangController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_bidang' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'nama_bidang' => 'required|string|max:255|unique:bidang,nama_bidang',
         ]);
 
-        Bidang::create($request->all());
+        Bidang::create($validatedData);
 
         return redirect()->route('admin.bidang.index')->with('success', 'Bidang berhasil dibuat.');
     }
@@ -52,11 +52,11 @@ class BidangController extends Controller
      */
     public function update(Request $request, Bidang $bidang)
     {
-        $request->validate([
-            'nama_bidang' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'nama_bidang' => 'required|string|max:255|unique:bidang,nama_bidang,' . $bidang->id,
         ]);
 
-        $bidang->update($request->all());
+        $bidang->update($validatedData);
 
         return redirect()->route('admin.bidang.index')->with('success', 'Bidang berhasil diperbarui.');
     }

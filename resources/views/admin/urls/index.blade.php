@@ -75,7 +75,7 @@
                                 <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->updated_at->format('d M Y') }}</td>
                                 <td class="px-4 py-2">
                                     <div class="flex items-center justify-center gap-2">
-   
+
                                         {{-- Edit --}}
                                         <a href="{{ route('admin.urls.edit', $url->id) }}"
                                             class="inline-flex items-center justify-center w-14 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"

@@ -27,6 +27,7 @@ class Url extends Model
         'original_url',
         'bidang_id',
         'seksi_id',
+        'user_id', // Tambahkan user_id di sini agar dapat diisi secara massal
     ];
 
     /**
@@ -37,9 +38,19 @@ class Url extends Model
         return $this->belongsTo(Bidang::class, 'bidang_id');
     }
 
+    /**
+     * Mendapatkan data seksi yang memiliki URL ini.
+     */
     public function seksi()
     {
         return $this->belongsTo(Seksi::class, 'seksi_id');
     }
 
+    /**
+     * Mendapatkan user yang membuat URL ini.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
