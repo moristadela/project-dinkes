@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Bidang; // Tambahkan ini
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -13,20 +14,23 @@ class UserController extends Controller
 {
     /**
      * Menampilkan daftar semua pengguna.
+     * Mengirimkan data 'users' dan 'bidangs' ke view.
      */
     public function index()
     {
         $users = User::latest()->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $bidangs = Bidang::all(); // Mengambil semua data bidang
+        return view('admin.users.index', compact('users', 'bidangs'));
     }
 
     /**
      * Menampilkan form untuk membuat pengguna baru.
+     * Tidak diperlukan karena Anda menggunakan modal.
      */
-    public function create()
-    {
-        return view('admin.users.create');
-    }
+    // public function create()
+    // {
+    //     // return view('admin.users.create');
+    // }
 
     /**
      * Menyimpan pengguna baru ke database.
@@ -38,7 +42,7 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', PasswordRules\Password::defaults()],
             'role' => ['required', 'string', Rule::in(['admin', 'user'])],
-             'bidang_id' => 'required|exists:bidang,id',
+            'bidang_id' => 'required|exists:bidang,id',
         ]);
 
         User::create([
@@ -50,7 +54,7 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('admin.users.index')
-                         ->with('success', 'User baru berhasil ditambahkan.');
+                             ->with('success', 'User baru berhasil ditambahkan.');
     }
     
     /**
@@ -58,7 +62,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $bidangs = Bidang::all(); // Mengambil semua data bidang untuk form edit
+        return view('admin.users.edit', compact('user', 'bidangs'));
     }
 
     /**
@@ -90,7 +95,7 @@ class UserController extends Controller
         }
 
         return redirect()->route('admin.users.index')
-                         ->with('success', 'Data user berhasil diperbarui.');
+                             ->with('success', 'Data user berhasil diperbarui.');
     }
 
     /**
@@ -101,12 +106,12 @@ class UserController extends Controller
         // Pencegahan: Admin tidak bisa menghapus akunnya sendiri
         if (auth()->id() == $user->id) {
             return redirect()->route('admin.users.index')
-                             ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+                               ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
         $user->delete();
 
         return redirect()->route('admin.users.index')
-                         ->with('success', 'User berhasil dihapus.');
+                             ->with('success', 'User berhasil dihapus.');
     }
 }

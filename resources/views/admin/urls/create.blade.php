@@ -1,17 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-6"
-     x-data="{
-         bidangId: '',
-         seksiList: [],
-         allBidang: {{ $bidangWithSeksi->toJson() }}
-     }"
-     x-effect="
-     let bidang = allBidang.find(b => b.id == bidangId);
-     seksiList = bidang ? bidang.seksi : [];
-     ">
-
+<div class="max-w-4xl mx-auto p-6">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Buat URL Baru</h1>
 
     <div class="bg-white shadow-md rounded-lg p-6">
@@ -38,7 +28,7 @@
 
             <!-- Shortlink Kustom -->
             <div class="mb-4">
-                <label for="shortlink" class="block text-sm font-medium text-gray-700">Shortlink Kustom (Opsional)</label>
+                <label for="shortlink" class="block text-sm font-medium text-gray-700">Shortlink Custom</label>
                 <div class="mt-1 flex rounded-md shadow-sm">
                     <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                         {{ url('/') }}/
@@ -50,36 +40,17 @@
                 @enderror
             </div>
 
-            <!-- Bidang -->
+            <!-- Bidang - Otomatis terisi -->
             <div class="mb-4">
                 <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
-                <select name="bidang_id" id="bidang_id"
-                        x-model="bidangId"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
-                    <option value="">Pilih Bidang</option>
-                    <template x-for="b in allBidang" :key="b.id">
-                        <option :value="b.id" x-text="b.nama_bidang"></option>
-                    </template>
-                </select>
-                @error('bidang_id')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 bg-gray-100 text-gray-600">
+                    {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
+                </div>
+                <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
             </div>
 
-            <!-- Seksi -->
-            <div class="mb-4">
-                <label for="seksi_id" class="block text-sm font-medium text-gray-700">Seksi</label>
-                <select name="seksi_id" id="seksi_id"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
-                    <option value="">Pilih Seksi</option>
-                    <template x-for="s in seksiList" :key="s.id">
-                        <option :value="s.id" x-text="s.nama_seksi"></option>
-                    </template>
-                </select>
-                @error('seksi_id')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+            <!-- Seksi - Otomatis terisi (Hidden) -->
+            <input type="hidden" name="seksi_id" value="{{ auth()->user()->seksi_id }}">
 
             <!-- Tombol -->
             <div class="flex justify-end mt-6">

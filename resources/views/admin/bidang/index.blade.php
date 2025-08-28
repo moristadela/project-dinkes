@@ -26,7 +26,7 @@
                     <tr>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nama Bidang</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Jumlah Seksi</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Jumlah User</th>
                         <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                     </tr>
                 </thead>
@@ -35,7 +35,7 @@
                         <tr>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $b->id }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $b->nama_bidang }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $b->seksi->count() }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">{{ $b->users->count() }}</td>
                             <td class="px-4 py-2 text-center">
                                 {{-- Button Edit --}}
                                 <div class="flex items-center justify-center gap-2">
