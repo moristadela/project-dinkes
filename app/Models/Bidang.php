@@ -20,8 +20,8 @@ class Bidang extends Model
      * Get the seksis for the bidang.
      * Menggunakan eksplisit foreign key untuk keandalan.
      */
-    public function seksi(): HasMany
+    public function users()
     {
-        return $this->hasMany(Seksi::class, 'bidang_id', 'id');
+        return $this->hasMany(User::class);
     }
 }

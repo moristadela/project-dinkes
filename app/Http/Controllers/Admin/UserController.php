@@ -38,6 +38,7 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', PasswordRules\Password::defaults()],
             'role' => ['required', 'string', Rule::in(['admin', 'user'])],
+             'bidang_id' => 'required|exists:bidang,id',
         ]);
 
         User::create([
@@ -45,6 +46,7 @@ class UserController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'bidang_id' => $request->bidang_id,
         ]);
 
         return redirect()->route('admin.users.index')
@@ -69,6 +71,7 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
             'role' => ['required', 'string', Rule::in(['admin', 'user'])],
             'password' => ['nullable', 'confirmed', PasswordRules\Password::defaults()],
+            'bidang_id' => ['required', 'exists:bidang,id'],
         ]);
         
         // Update data dasar
@@ -76,6 +79,7 @@ class UserController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'role' => $request->role,
+            'bidang_id' => $request->bidang_id,
         ]);
         
         // Hanya update password jika kolom password diisi
