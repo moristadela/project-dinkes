@@ -71,8 +71,8 @@
                                 </td>
                                 <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->bidang->nama_bidang ?? 'N/A' }}</td>
                                 <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->seksi->nama_seksi ?? 'N/A' }}</td>
-                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->created_at->format('Y-m-d') }}</td>
-                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->updated_at->format('Y-m-d') }}</td>
+                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->created_at->format('d M Y') }}</td>
+                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->updated_at->format('d M Y') }}</td>
                                 <td class="px-4 py-2">
                                     <div class="flex items-center justify-center gap-2">
    

@@ -19,7 +19,7 @@
         </div>
     @endif
 
-    <!-- Microsite Table -->
+    {{--Microsite Table --}}
     <div class="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-100">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -32,7 +32,10 @@
                             Shortlink
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Bidang / Seksi
+                            Seksi
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Bidang
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Tanggal Dibuat
@@ -54,7 +57,10 @@
                                 </a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                 {{ $microsite->bidang->nama_bidang ?? '-' }} / {{ $microsite->seksi->nama_seksi ?? '-' }}
+                                  {{ $microsite->seksi->nama_seksi ?? '-' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                 {{ $microsite->bidang->nama_bidang ?? '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $microsite->created_at->format('d M Y') }}

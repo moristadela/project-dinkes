@@ -26,7 +26,7 @@
                     <tr>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nama Bidang</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Jumlah URL</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Jumlah Seksi</th>
                         <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
                     </tr>
                 </thead>
