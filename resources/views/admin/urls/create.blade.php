@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-6" 
+<div class="max-w-4xl mx-auto p-6"
      x-data="{
-        bidangId: '',
-        seksiList: [],
-        allBidang: {{ $bidang->toJson() }}
+         bidangId: '',
+         seksiList: [],
+         allBidang: {{ $bidangWithSeksi->toJson() }}
      }"
      x-effect="
      let bidang = allBidang.find(b => b.id == bidangId);
@@ -36,19 +36,31 @@
                 @enderror
             </div>
 
+            <!-- Shortlink Kustom -->
+            <div class="mb-4">
+                <label for="shortlink" class="block text-sm font-medium text-gray-700">Shortlink Kustom (Opsional)</label>
+                <div class="mt-1 flex rounded-md shadow-sm">
+                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                        {{ url('/') }}/
+                    </span>
+                    <input type="text" name="shortlink" id="shortlink" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="custom-nama">
+                </div>
+                @error('shortlink')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             <!-- Bidang -->
             <div class="mb-4">
                 <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
-                <select name="bidang_id" id="bidang_id" 
+                <select name="bidang_id" id="bidang_id"
                         x-model="bidangId"
-                        class="mt-1 block w-full ...">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
                     <option value="">Pilih Bidang</option>
                     <template x-for="b in allBidang" :key="b.id">
                         <option :value="b.id" x-text="b.nama_bidang"></option>
                     </template>
                 </select>
-
-
                 @error('bidang_id')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -57,7 +69,7 @@
             <!-- Seksi -->
             <div class="mb-4">
                 <label for="seksi_id" class="block text-sm font-medium text-gray-700">Seksi</label>
-                <select name="seksi_id" id="seksi_id" 
+                <select name="seksi_id" id="seksi_id"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
                     <option value="">Pilih Seksi</option>
                     <template x-for="s in seksiList" :key="s.id">

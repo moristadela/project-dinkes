@@ -1,13 +1,14 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100 shadow-sm">
     <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
+            
             <!-- Logo (Kiri) -->
             <div class="flex items-center">
-                <a href="{{ route('dashboard') }}" class="flex items-center space-x-4">
-                    <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" class="h-12 flex-shrink-0" alt="Logo" />
+                <a href="{{ route('dashboard') }}" class="flex items-center space-x-2 md:space-x-4">
+                    <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" class="h-10 md:h-12 flex-shrink-0" alt="Logo" />
                     <div class="text-blue-600 font-bold uppercase leading-tight flex flex-col min-w-0 flex-shrink-0">
-                        <div class="text-sm md:text-lg bold">DINAS KESEHATAN</div>
-                        <div class="text-sm md:text-lg bold">PROVINSI JAWA TENGAH</div>
+                        <div class="text-xs md:text-sm">DINAS KESEHATAN</div>
+                        <div class="text-xs md:text-sm">PROVINSI JAWA TENGAH</div>
                     </div>
                 </a>
             </div>

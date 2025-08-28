@@ -11,7 +11,9 @@ use App\Http\Controllers\Admin\MicrositeController;
 
 
 // Halaman awal
-Route::get('/', fn () => view('welcome'));
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 // Dashboard user biasa
 Route::get('/dashboard', fn () => view('dashboard'))

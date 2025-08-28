@@ -7,7 +7,7 @@
          bidangId: '{{ old('bidang_id', $url->bidang_id) }}',
          seksiId: '{{ old('seksi_id', $url->seksi_id) }}',
          seksiList: [],
-         allBidang: {{ $allBidang->toJson() }}
+         allBidang: {{ $bidangWithSeksi->toJson() }}
      }"
      x-init="
          // Gunakan $watch untuk bereaksi terhadap perubahan pada bidangId
@@ -54,7 +54,13 @@
 
             <div class="mb-4">
                 <label for="original_url" class="block text-sm font-medium text-gray-700">URL Asli</label>
-                <input type="url" name="original_url" id="original_url" value="{{ old('original_url', $url->original_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="[https://contoh.com](https://contoh.com)" required>
+                <input type="url" name="original_url" id="original_url" value="{{ old('original_url', $url->original_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="https://contoh.com" required>
+            </div>
+
+            <!-- Tambahan: Field untuk shortlink -->
+            <div class="mb-4">
+                <label for="shortlink" class="block text-sm font-medium text-gray-700">Shortlink Kustom (Opsional)</label>
+                <input type="text" name="shortlink" id="shortlink" value="{{ old('shortlink', $url->short_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="contoh-shortlink">
             </div>
 
             <div class="mb-4">

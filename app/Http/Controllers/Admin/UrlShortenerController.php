@@ -7,24 +7,29 @@ use App\Http\Controllers\Controller;
 use App\Models\Url;
 use App\Models\Bidang;
 use App\Models\Seksi;
-use App\Models\Microsite; // Impor model Microsite
+use App\Models\Microsite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class UrlShortenerController extends Controller
 {
     /**
      * Menampilkan daftar semua URL.
+     * Mengambil data URL terbaru dengan relasi bidang dan seksi,
+     * serta menghitung total shortlink dan microsite untuk dashboard.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        // Ambil data dengan relasi bidang dan seksi untuk ditampilkan
+        // Ambil data dengan relasi bidang dan seksi untuk ditampilkan di tabel
         $urls = Url::with(['bidang', 'seksi'])->latest()->paginate(10);
 
-        // Mengambil total shortlink
+        // Menghitung total shortlink dari model Url
         $totalUrls = Url::count();
         
-        // Mengambil total microsite dari model Microsite
+        // Menghitung total microsite dari model Microsite
         $totalMicrosites = Microsite::count();
         
         // Mengambil data bidang dan seksi untuk form modal di dashboard
@@ -36,33 +41,46 @@ class UrlShortenerController extends Controller
 
     /**
      * Menampilkan form untuk membuat URL baru.
+     *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        // PERBAIKAN: Menggunakan sintaks with() yang benar
-        $bidang = \App\Models\Bidang::with('seksi')->get();
-        return view('admin.urls.create', compact('bidang'));
+        // Mengambil semua data Bidang dengan relasi Seksi-nya
+        $bidangWithSeksi = Bidang::with('seksi')->get();
+        return view('admin.urls.create', compact('bidangWithSeksi'));
     }
 
 
     /**
      * Menyimpan URL baru ke database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
+            'shortlink' => 'nullable|string|alpha_dash|max:255|unique:url,short_url',
             'bidang_id' => 'required|exists:bidang,id',
             'seksi_id' => 'required|exists:seksi,id',
         ]);
+
+        // Perbaikan: Pastikan shortlink yang disimpan adalah yang diinputkan pengguna jika ada.
+        if (empty($request->shortlink)) {
+            $shortUrl = $this->generateUniqueShortUrl();
+        } else {
+            $shortUrl = $request->shortlink;
+        }
 
         Url::create([
             'title' => $request->title,
             'original_url' => $request->original_url,
             'bidang_id' => $request->bidang_id,
             'seksi_id' => $request->seksi_id,
-            'short_url' => Str::random(7),
+            'short_url' => $shortUrl,
         ]);
 
         return redirect()->route('admin.urls.index')
@@ -70,29 +88,45 @@ class UrlShortenerController extends Controller
     }
 
     /**
-     * Menampilkan form untuk mengedit URL.
+     * Menampilkan form untuk mengedit URL yang sudah ada.
+     *
+     * @param  \App\Models\Url  $url
+     * @return \Illuminate\View\View
      */
     public function edit(Url $url)
     {
-        // PERBAIKAN: Mengambil semua data Bidang dengan relasi Seksi-nya
-        // Ini diperlukan agar dropdown seksi bisa dinamis di halaman edit
-        $allBidang = Bidang::with('seksi')->get();
-        return view('admin.urls.edit', compact('url', 'allBidang'));
+        // Mengambil semua data Bidang dengan relasi Seksi-nya
+        $bidangWithSeksi = Bidang::with('seksi')->get();
+        return view('admin.urls.edit', compact('url', 'bidangWithSeksi'));
     }
 
     /**
      * Memperbarui data URL di database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Url  $url
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Url $url)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
+            // Perbaikan: Validasi shortlink, mengecualikan URL saat ini menggunakan id
+            'shortlink' => 'nullable|string|alpha_dash|max:255|unique:url,short_url,' . $url->id,
             'bidang_id' => 'required|exists:bidang,id',
             'seksi_id' => 'required|exists:seksi,id',
         ]);
+        
+        $shortUrl = $request->shortlink ?? $url->short_url;
 
-        $url->update($request->all());
+        $url->update([
+            'title' => $request->title,
+            'original_url' => $request->original_url,
+            'bidang_id' => $request->bidang_id,
+            'seksi_id' => $request->seksi_id,
+            'short_url' => $shortUrl,
+        ]);
 
         return redirect()->route('admin.urls.index')
                              ->with('success', 'URL berhasil diperbarui.');
@@ -100,6 +134,9 @@ class UrlShortenerController extends Controller
 
     /**
      * Menghapus URL dari database.
+     *
+     * @param  \App\Models\Url  $url
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Url $url)
     {
@@ -108,40 +145,62 @@ class UrlShortenerController extends Controller
                              ->with('success', 'URL berhasil dihapus.');
     }
 
+    /**
+     * Menampilkan form publik untuk membuat shortlink.
+     *
+     * @return \Illuminate\View\View
+     */
     public function generateForm()
     {
-        $urls = Url::latest()->get(); // ambil semua data url
+        $urls = Url::latest()->get();
         return view('shortlink.index', compact('urls'));
     }
 
 
+    /**
+     * Menghasilkan shortlink acak dan menyimpannya ke database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function generate(Request $request)
     {
         $request->validate([
             'original_url' => 'required|url'
         ]);
 
-        // bikin shortlink random
-        $short = Str::random(7);
+        // Menggunakan helper untuk memastikan shortlink yang dihasilkan unik
+        $short = $this->generateUniqueShortUrl();
 
-        // simpan ke database
-        $url = \App\Models\Url::create([
+        $url = Url::create([
             'title' => 'Generated Shortlink',
             'original_url' => $request->original_url,
             'short_url' => $short,
-            'bidang_id' => 1, // sementara dummy, nanti bisa pilih
-            'seksi_id' => 1   // sementara dummy
+            'bidang_id' => null, // Mengatur ke null agar tidak memerlukan bidang/seksi
+            'seksi_id' => null   // jika tidak disediakan
         ]);
 
         return back()->with('short_url', url($short));
     }
 
+    /**
+     * Logika penyimpanan tambahan.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(Request $request)
     {
-        // logika penyimpanan tambahan (kalau perlu update title/bidang/seksi)
+        // Jika form save memiliki validasi, bisa ditambahkan di sini.
         return redirect()->route('shortlink.index')->with('success', 'Shortlink berhasil disimpan!');
     }
 
+    /**
+     * Mengarahkan pengguna ke URL asli dari shortlink.
+     *
+     * @param  string  $short_url
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function redirectToOriginal($short_url)
     {
         $url = Url::where('short_url', $short_url)->first();
@@ -151,5 +210,21 @@ class UrlShortenerController extends Controller
         }
 
         return redirect()->away($url->original_url);
+    }
+    
+    /**
+     * Helper untuk menghasilkan shortlink unik.
+     *
+     * @param int $length
+     * @return string
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function generateUniqueShortUrl($length = 7)
+    {
+        do {
+            $shortUrl = Str::random($length);
+        } while (Url::where('short_url', $shortUrl)->exists());
+
+        return $shortUrl;
     }
 }

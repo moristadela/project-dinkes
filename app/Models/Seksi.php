@@ -10,7 +10,7 @@ class Seksi extends Model
 {
     use HasFactory;
     
-    protected $table = 'seksi'; // Pastikan nama tabelnya benar
+    protected $table = 'seksi'; 
     protected $guarded = ['id'];
     
     /**

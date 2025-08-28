@@ -39,7 +39,7 @@
                         </div>
                         <input type="text" name="shortlink" id="shortlink"
                                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg @error('shortlink') border-red-500 @enderror"
-                               value="{{ old('shortlink') }}" required>
+                               placeholder="nama-microsite" value="{{ old('shortlink') }}" required>
                     </div>
                     @error('shortlink')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -51,7 +51,7 @@
                     <label for="title" class="block text-sm font-medium text-gray-700">Judul Microsite</label>
                     <input type="text" name="title" id="title"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('title') border-red-500 @enderror"
-                            value="{{ old('title') }}" required>
+                           placeholder="Contoh: Microsite Pelayanan Publik" value="{{ old('title') }}" required>
                     @error('title')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -60,25 +60,25 @@
                 <!-- Bidang & Seksi -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label for="bidang" class="block text-sm font-medium text-gray-700">Bidang</label>
-                        <select id="bidang" name="bidang"
-                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('bidang') border-red-500 @enderror" required>
+                        <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
+                        <select id="bidang_id" name="bidang_id"
+                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('bidang_id') border-red-500 @enderror" required>
                             <option value="">-- Pilih Bidang --</option>
                             @foreach($allBidang as $bidang)
-                                <option value="{{ $bidang->id }}" {{ old('bidang') == $bidang->id ? 'selected' : '' }}>{{ $bidang->nama_bidang }}</option>
+                                <option value="{{ $bidang->id }}" {{ old('bidang_id') == $bidang->id ? 'selected' : '' }}>{{ $bidang->nama_bidang }}</option>
                             @endforeach
                         </select>
-                        @error('bidang')
+                        @error('bidang_id')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label for="seksi" class="block text-sm font-medium text-gray-700">Seksi</label>
-                        <select id="seksi" name="seksi"
-                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('seksi') border-red-500 @enderror" required>
+                        <label for="seksi_id" class="block text-sm font-medium text-gray-700">Seksi</label>
+                        <select id="seksi_id" name="seksi_id"
+                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('seksi_id') border-red-500 @enderror" required>
                             <option value="">-- Pilih Seksi --</option>
                         </select>
-                        @error('seksi')
+                        @error('seksi_id')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -118,13 +118,13 @@
                                     <label for="links[0][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                                     <input type="text" name="links[0][title]" id="links[0][title]"
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           >
+                                           placeholder="Contoh: WhatsApp">
                                 </div>
                                 <div class="flex-1">
                                     <label for="links[0][url]" class="block text-sm font-medium text-gray-700">URL</label>
                                     <input type="url" name="links[0][url]" id="links[0][url]"
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           >
+                                           placeholder="https://wa.me/...">
                                 </div>
                                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -155,8 +155,8 @@
     const allBidang = @json($allBidang);
 
     document.addEventListener('DOMContentLoaded', function() {
-        const bidangSelect = document.getElementById('bidang');
-        const seksiSelect = document.getElementById('seksi');
+        const bidangSelect = document.getElementById('bidang_id');
+        const seksiSelect = document.getElementById('seksi_id');
         const linksContainer = document.getElementById('links-container');
         const addLinkBtn = document.getElementById('add-link-btn');
         let linkIndex = linksContainer.querySelectorAll('.link-group').length;
@@ -172,7 +172,7 @@
                         const option = document.createElement('option');
                         option.value = seksi.id;
                         option.textContent = seksi.nama_seksi;
-                        if ('{{ old('seksi') }}' == seksi.id) {
+                        if ('{{ old('seksi_id') }}' == seksi.id) {
                             option.selected = true;
                         }
                         seksiSelect.appendChild(option);
@@ -190,13 +190,13 @@
                     <label for="links[${linkIndex}][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                     <input type="text" name="links[${linkIndex}][title]" id="links[${linkIndex}][title]"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           >
+                           placeholder="Contoh: WhatsApp">
                 </div>
                 <div class="flex-1">
                     <label for="links[${linkIndex}][url]" class="block text-sm font-medium text-gray-700">URL</label>
                     <input type="url" name="links[${linkIndex}][url]" id="links[${linkIndex}][url]"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           >
+                           placeholder="https://wa.me/...">
                 </div>
                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
