@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Url;
 use App\Models\Bidang;
-use App\Models\Seksi;
+use App\Models\User;
 use App\Models\Microsite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -24,7 +24,7 @@ class UrlShortenerController extends Controller
     public function index()
     {
         // Ambil data dengan relasi bidang dan seksi untuk ditampilkan di tabel
-        $urls = Url::with(['bidang', 'seksi'])->latest()->paginate(10);
+        $urls = Url::with(['bidang', 'users'])->latest()->paginate(10);
 
         // Menghitung total shortlink dari model Url
         $totalUrls = Url::count();
@@ -34,9 +34,9 @@ class UrlShortenerController extends Controller
         
         // Mengambil data bidang dan seksi untuk form modal di dashboard
         $bidang = Bidang::all();
-        $seksi  = Seksi::all();
+        $user  = User::all();
 
-        return view('admin.urls.index', compact('urls', 'bidang', 'seksi', 'totalUrls', 'totalMicrosites'));
+        return view('admin.urls.index', compact('urls', 'bidang', 'users', 'totalUrls', 'totalMicrosites'));
     }
 
     /**
@@ -47,8 +47,8 @@ class UrlShortenerController extends Controller
     public function create()
     {
         // Mengambil semua data Bidang dengan relasi Seksi-nya
-        $bidangWithSeksi = Bidang::with('seksi')->get();
-        return view('admin.urls.create', compact('bidangWithSeksi'));
+        $bidangWithUser = Bidang::with('users')->get();
+        return view('admin.urls.create', compact('bidangWithusers'));
     }
 
 
@@ -65,7 +65,7 @@ class UrlShortenerController extends Controller
             'original_url' => 'required|url',
             'shortlink' => 'nullable|string|alpha_dash|max:255|unique:url,short_url',
             'bidang_id' => 'required|exists:bidang,id',
-            'seksi_id' => 'required|exists:seksi,id',
+            'users_id' => 'required|exists:users,id',
         ]);
 
         // Perbaikan: Pastikan shortlink yang disimpan adalah yang diinputkan pengguna jika ada.
@@ -79,7 +79,7 @@ class UrlShortenerController extends Controller
             'title' => $request->title,
             'original_url' => $request->original_url,
             'bidang_id' => $request->bidang_id,
-            'seksi_id' => $request->seksi_id,
+            'users_id' => $request->users_id,
             'short_url' => $shortUrl,
         ]);
 
@@ -112,10 +112,9 @@ class UrlShortenerController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
-            // Perbaikan: Validasi shortlink, mengecualikan URL saat ini menggunakan id
             'shortlink' => 'nullable|string|alpha_dash|max:255|unique:url,short_url,' . $url->id,
             'bidang_id' => 'required|exists:bidang,id',
-            'seksi_id' => 'required|exists:seksi,id',
+            'users_id' => 'required|exists:users,id',
         ]);
         
         $shortUrl = $request->shortlink ?? $url->short_url;
@@ -124,7 +123,7 @@ class UrlShortenerController extends Controller
             'title' => $request->title,
             'original_url' => $request->original_url,
             'bidang_id' => $request->bidang_id,
-            'seksi_id' => $request->seksi_id,
+            'users_id' => $request->users_id,
             'short_url' => $shortUrl,
         ]);
 

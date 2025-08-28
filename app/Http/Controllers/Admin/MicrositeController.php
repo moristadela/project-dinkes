@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Bidang;
-use App\Models\Seksi;
+use App\Models\User;
 use App\Models\DaftarLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +29,7 @@ class MicrositeController extends Controller
     public function create()
     {
         // Mengambil semua data Bidang dan Seksi yang terkait
-        $allBidang = Bidang::with('seksi')->get();
+        $allBidang = Bidang::with('users')->get();
         // Mengirimkan data ke view
         return view('admin.microsites.create', compact('allBidang'));
     }
@@ -43,7 +43,7 @@ class MicrositeController extends Controller
             'shortlink' => 'required|string|max:255|unique:microsites,shortlink',
             'title'     => 'required|string|max:255',
             'bidang_id' => 'required|exists:bidang,id',
-            'seksi_id'  => 'required|exists:seksi,id',
+            'users_id'  => 'required|exists:users,id',
             'links'     => 'nullable|array',
             'links.*.title' => 'required|string|max:255',
             'links.*.url'   => 'required|url',
@@ -55,7 +55,7 @@ class MicrositeController extends Controller
                 'shortlink' => $request->shortlink,
                 'title'     => $request->title,
                 'bidang_id' => $request->bidang_id,
-                'seksi_id'  => $request->seksi_id,
+                'users_id'  => $request->users_id,
             ]);
 
             // Menyimpan setiap link ke tabel daftar_link dan mengaitkannya dengan microsite baru
@@ -82,7 +82,7 @@ class MicrositeController extends Controller
         // Memuat link terkait saat mengedit
         $microsite->load('links');
         // Mengambil semua data Bidang dan Seksi yang terkait
-        $allBidang = Bidang::with('seksi')->get();
+        $allBidang = Bidang::with('users')->get();
         return view('admin.microsites.edit', compact('microsite', 'allBidang'));
     }
 
@@ -95,7 +95,7 @@ class MicrositeController extends Controller
             'shortlink' => 'required|unique:microsites,shortlink,' . $microsite->id,
             'title'     => 'required|string|max:255',
             'bidang_id' => 'required|exists:bidang,id',
-            'seksi_id'  => 'required|exists:seksi,id',
+            'users_id'  => 'required|exists:users,id',
             'links'     => 'nullable|array',
             'links.*.title' => 'required|string|max:255',
             'links.*.url'   => 'required|url',
@@ -108,7 +108,7 @@ class MicrositeController extends Controller
                 'shortlink' => $request->shortlink,
                 'title'     => $request->title,
                 'bidang_id' => $request->bidang_id,
-                'seksi_id'  => $request->seksi_id,
+                'users_id'  => $request->users_id,
             ]);
 
             $existingLinkIds = $microsite->links->pluck('id')->toArray();

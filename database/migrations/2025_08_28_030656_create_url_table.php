@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('short_url')->unique(); 
             $table->text('original_url'); 
             $table->foreignId('bidang_id')->constrained('bidang')->onDelete('cascade');
-            $table->foreignId('seksi_id')->constrained('seksi')->onDelete('cascade');
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
             $table->timestamps(); 
         });
     }

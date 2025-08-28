@@ -39,7 +39,7 @@ class Url extends Model
 
     public function seksi()
     {
-        return $this->belongsTo(Seksi::class, 'seksi_id');
+        return $this->belongsTo(User::class, 'users_id');
     }
 
 }

@@ -6,6 +6,7 @@
     <title>{{ config('app.name', 'Dinkes Web') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="icon" type="image/png" href="https://dinkes.jatengprov.go.id/wp-content/uploads/2023/02/Logo-Provinsi-Jawa-Tengah-1-e1675238827781.png">
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
