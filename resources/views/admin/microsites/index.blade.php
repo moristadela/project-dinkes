@@ -57,7 +57,7 @@
                                 </a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                  {{ $url->user->name ?? 'N/A' }}
+                                  {{ $microsite->user->name ?? 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                  {{ $microsite->bidang->nama_bidang ?? '-' }}

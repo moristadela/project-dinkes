@@ -22,7 +22,7 @@ class DaftarLink extends Model
     public function microsite()
     {
         // foreign key = microsites_id, owner key = id
-        return $this->belongsTo(Microsite::class, 'microsites_id', 'id');
+        return $this->belongsTo(Microsite::class, 'microsite_id', 'id');
     }
 
 }

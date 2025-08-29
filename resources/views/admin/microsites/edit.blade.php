@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto py-10 px-6">
-
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-3xl font-bold text-gray-800">Edit Microsite: {{ $microsite->title }}</h2>
@@ -61,21 +60,16 @@
                     @enderror
                 </div>
 
-                <!-- Bidang & Seksi -->
+                <!-- Bidang & User -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {{-- Bidang input (read-only) --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Bidang</label>
-                        {{-- Menampilkan nama bidang sebagai teks biasa --}}
                         <p class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 bg-gray-100 text-gray-700">
                             {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
                         </p>
-                        {{-- Menyertakan input tersembunyi untuk mengirimkan ID bidang --}}
                         <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
                     </div>
-
-                    <!-- Field untuk Seksi (Read-only) -->
-                        <input type="hidden" name="users_id" value="{{ auth()->id() ?? '' }}">
+                    <input type="hidden" name="users_id" value="{{ auth()->id() }}">
                 </div>
 
                 <!-- Dynamic Links Fieldset -->
@@ -83,19 +77,23 @@
                     <legend class="text-base font-medium text-gray-900">Link-link</legend>
                     <p class="text-sm text-gray-500">Tambahkan link yang ingin Anda tampilkan di microsite.</p>
                     <div id="links-container" class="mt-4 space-y-4">
-                        @forelse($microsite->links ?? [] as $index => $link)
+                        @php
+                            $links = old('links', $microsite->daftarLinks->toArray());
+                        @endphp
+
+                        @forelse($links as $index => $link)
                             <div class="flex items-end space-x-2 link-group">
                                 <div class="flex-1">
-                                    <label for="links[{{ $index }}][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
-                                    <input type="text" name="links[{{ $index }}][title]" id="links[{{ $index }}][title]"
+                                    <label class="block text-sm font-medium text-gray-700">Judul Link</label>
+                                    <input type="text" name="links[{{ $index }}][title]" 
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           value="{{ old('links.'.$index.'.title', $link['title'] ?? '') }}" placeholder="Contoh: WhatsApp">
+                                           value="{{ $link['title'] ?? '' }}" placeholder="Contoh: WhatsApp">
                                 </div>
                                 <div class="flex-1">
-                                    <label for="links[{{ $index }}][url]" class="block text-sm font-medium text-gray-700">URL</label>
-                                    <input type="url" name="links[{{ $index }}][url]" id="links[{{ $index }}][url]"
+                                    <label class="block text-sm font-medium text-gray-700">URL</label>
+                                    <input type="url" name="links[{{ $index }}][url]" 
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           value="{{ old('links.'.$index.'.url', $link['url'] ?? '') }}" placeholder="https://wa.me/...">
+                                           value="{{ $link['original_link'] ?? $link['url'] ?? '' }}" placeholder="https://wa.me/...">
                                 </div>
                                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -106,14 +104,12 @@
                         @empty
                             <div class="flex items-end space-x-2 link-group">
                                 <div class="flex-1">
-                                    <label for="links[0][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
-                                    <input type="text" name="links[0][title]" id="links[0][title]"
-                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                    <label class="block text-sm font-medium text-gray-700">Judul Link</label>
+                                    <input type="text" name="links[0][title]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                 </div>
                                 <div class="flex-1">
-                                    <label for="links[0][url]" class="block text-sm font-medium text-gray-700">URL</label>
-                                    <input type="url" name="links[0][url]" id="links[0][url]"
-                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                    <label class="block text-sm font-medium text-gray-700">URL</label>
+                                    <input type="url" name="links[0][url]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                 </div>
                                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -123,16 +119,15 @@
                             </div>
                         @endforelse
                     </div>
-                    <button type="button" id="add-link-btn" 
-                            class="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-md hover:bg-indigo-700 transition-colors">
+
+                    <button type="button" id="add-link-btn" class="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-md hover:bg-indigo-700 transition-colors">
                         + Tambah Link
                     </button>
                 </fieldset>
 
                 <!-- Submit Button -->
                 <div class="pt-6">
-                    <button type="submit" 
-                            class="w-full px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors">
+                    <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors">
                         Perbarui Microsite
                     </button>
                 </div>
@@ -142,68 +137,43 @@
 </div>
 
 <script>
-    const allBidang = @json($bidangWithSeksi);
-    const oldSeksiId = '{{ old('seksi_id', $microsite->seksi_id) }}';
+document.addEventListener('DOMContentLoaded', function() {
+    const linksContainer = document.getElementById('links-container');
+    const addLinkBtn = document.getElementById('add-link-btn');
+    let linkIndex = linksContainer.querySelectorAll('.link-group').length;
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const bidangSelect = document.getElementById('bidang_id');
-        const seksiSelect = document.getElementById('seksi_id');
-        const linksContainer = document.getElementById('links-container');
-        const addLinkBtn = document.getElementById('add-link-btn');
-        let linkIndex = linksContainer.querySelectorAll('.link-group').length;
+    function addLinkField() {
+        const newLinkGroup = document.createElement('div');
+        newLinkGroup.classList.add('flex', 'items-end', 'space-x-2', 'link-group');
+        newLinkGroup.innerHTML = `
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Judul Link</label>
+                <input type="text" name="links[${linkIndex}][title]" 
+                       class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
+                       placeholder="Contoh: WhatsApp">
+            </div>
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">URL</label>
+                <input type="url" name="links[${linkIndex}][url]" 
+                       class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
+                       placeholder="https://wa.me/...">
+            </div>
+            <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        `;
+        linksContainer.appendChild(newLinkGroup);
+        linkIndex++;
+    }
 
-        function populateSeksi() {
-            const selectedBidangId = bidangSelect.value;
-            seksiSelect.innerHTML = '<option value="">-- Pilih Seksi --</option>';
-            if (selectedBidangId) {
-                const selectedBidang = allBidang.find(b => b.id == selectedBidangId);
-                if (selectedBidang && selectedBidang.seksi) {
-                    selectedBidang.seksi.forEach(seksi => {
-                        const option = document.createElement('option');
-                        option.value = seksi.id;
-                        option.textContent = seksi.nama_seksi;
-                        if (oldSeksiId == seksi.id) {
-                            option.selected = true;
-                        }
-                        seksiSelect.appendChild(option);
-                    });
-                }
-            }
+    addLinkBtn.addEventListener('click', addLinkField);
+    linksContainer.addEventListener('click', function(event) {
+        if (event.target.closest('.remove-link-btn')) {
+            event.target.closest('.link-group').remove();
         }
-
-        function addLinkField() {
-            const newLinkGroup = document.createElement('div');
-            newLinkGroup.classList.add('flex', 'items-end', 'space-x-2', 'link-group');
-            newLinkGroup.innerHTML = `
-                <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">Judul Link</label>
-                    <input type="text" name="links[${linkIndex}][title]" 
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
-                </div>
-                <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">URL</label>
-                    <input type="url" name="links[${linkIndex}][url]" 
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
-                </div>
-                <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-            `;
-            linksContainer.appendChild(newLinkGroup);
-            linkIndex++;
-        }
-
-        bidangSelect.addEventListener('change', populateSeksi);
-        addLinkBtn.addEventListener('click', addLinkField);
-        linksContainer.addEventListener('click', (event) => {
-            if (event.target.closest('.remove-link-btn')) {
-                event.target.closest('.link-group').remove();
-            }
-        });
-
-        populateSeksi();
     });
+});
 </script>
 @endsection
