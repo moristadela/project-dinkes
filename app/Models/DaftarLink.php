@@ -4,21 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
 
 class DaftarLink extends Model
 {
     use HasFactory;
 
-    /**
-     * Menentukan nama tabel secara eksplisit.
-     */
-    protected $table = 'daftar_link';
+    protected $table = 'daftar_link'; // kasih tau nama tabel
 
-    /**
-     * Atribut yang bisa diisi secara massal.
-     */
     protected $fillable = [
         'microsite_id',
         'shortlink',
@@ -26,26 +18,11 @@ class DaftarLink extends Model
         'title',
     ];
 
-    /**
-     * Mendefinisikan relasi "milik" ke model Microsite.
-     * Setiap DaftarLink dimiliki oleh satu Microsite.
-     */
-    public function microsite(): BelongsTo
+    // Microsites
+    public function microsite()
     {
-        return $this->belongsTo(Microsite::class);
+        // foreign key = microsites_id, owner key = id
+        return $this->belongsTo(Microsite::class, 'microsites_id', 'id');
     }
 
-    protected static function booted()
-    {
-        static::creating(function ($link) {
-            if (empty($link->shortlink)) {
-                // Generate kode unik, misalnya 6 karakter
-                do {
-                    $short = Str::random(6);
-                } while (self::where('shortlink', $short)->exists());
-
-                $link->shortlink = $short;
-            }
-        });
-    }
 }

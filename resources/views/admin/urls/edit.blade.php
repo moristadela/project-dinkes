@@ -1,31 +1,9 @@
+{{-- FILE: resources/views/admin/urls/edit.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-6" 
-     x-data="{
-         // Inisialisasi data Alpine.js dengan nilai dari server
-         bidangId: '{{ old('bidang_id', $url->bidang_id) }}',
-         seksiId: '{{ old('seksi_id', $url->seksi_id) }}',
-         seksiList: [],
-         allBidang: {{ $bidangWithSeksi->toJson() }}
-     }"
-     x-init="
-         // Gunakan $watch untuk bereaksi terhadap perubahan pada bidangId
-         $watch('bidangId', value => {
-             let bidang = allBidang.find(b => b.id == value);
-             seksiList = bidang ? bidang.seksi : [];
-             // Jika bidangId berubah, reset seksiId agar tidak ada pilihan yang salah
-             // unless the new bidang has the current seksi
-             if (seksiList.findIndex(s => s.id == seksiId) === -1) {
-                 seksiId = '';
-             }
-         });
-         // Panggil logika filter saat inisialisasi untuk memuat seksi awal
-         let initialBidang = allBidang.find(b => b.id == bidangId);
-         if (initialBidang) {
-             seksiList = initialBidang.seksi;
-         }
-     ">
+<div class="max-w-4xl mx-auto p-6">
 
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Edit URL</h1>
 
@@ -57,7 +35,6 @@
                 <input type="url" name="original_url" id="original_url" value="{{ old('original_url', $url->original_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="https://contoh.com" required>
             </div>
 
-            <!-- Tambahan: Field untuk shortlink -->
             <div class="mb-4">
                 <label for="shortlink" class="block text-sm font-medium text-gray-700">Shortlink Kustom (Opsional)</label>
                 <input type="text" name="shortlink" id="shortlink" value="{{ old('shortlink', $url->short_url) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="contoh-shortlink">
@@ -65,28 +42,13 @@
 
             <div class="mb-4">
                 <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
-                <select name="bidang_id" id="bidang_id" 
-                        x-model="bidangId"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+                <select name="bidang_id" id="bidang_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
                     <option value="">Pilih Bidang</option>
-                    <template x-for="b in allBidang" :key="b.id">
-                        <option :value="b.id" x-text="b.nama_bidang"></option>
-                    </template>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label for="seksi_id" class="block text-sm font-medium text-gray-700">Seksi</label>
-                <select name="seksi_id" id="seksi_id" 
-                        x-model="seksiId"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
-                    <option value="">Pilih Seksi</option>
-                    <template x-if="seksiList.length === 0 && bidangId !== ''">
-                        <option value="" disabled>Tidak ada seksi</option>
-                    </template>
-                    <template x-for="s in seksiList" :key="s.id">
-                        <option :value="s.id" x-text="s.nama_seksi"></option>
-                    </template>
+                    @foreach($bidangWithSeksi as $bidang)
+                        <option value="{{ $bidang->id }}" {{ old('bidang_id', $url->bidang_id) == $bidang->id ? 'selected' : '' }}>
+                            {{ $bidang->nama_bidang }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
 

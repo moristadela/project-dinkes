@@ -6,36 +6,33 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Url;
 use App\Models\Bidang;
-use App\Models\User;
-use App\Models\Microsite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use Exception;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth; // Tambahkan ini
 
 class UrlShortenerController extends Controller
 {
     /**
-     * Menampilkan daftar URL yang dibuat oleh seksi dari user yang sedang login.
+     * Menampilkan daftar semua URL.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        // Ambil data dengan relasi bidang dan seksi untuk ditampilkan di tabel
-        $urls = Url::with(['bidang', 'users'])->latest()->paginate(10);
+            // Ambil URL hanya untuk pengguna yang sedang login, dengan relasi Bidang, Seksi, dan User
+        $urls = Url::with(['bidang', 'seksi', 'user'])
+                   ->where('users_id', Auth::id())
+                   ->paginate(10); // Menggunakan paginate untuk performa
 
-        // Menghitung total shortlink dari model Url
-        $totalUrls = Url::count();
+        // Ambil total URL dan Microsite (contoh, sesuaikan dengan definisi microsite Anda)
+        $totalUrls = $urls->total(); // Mengambil total dari pagination
+        $totalMicrosites = Url::where('users_id', Auth::id())
+                                ->whereNotNull('title') 
+                                ->count();
         
-        // Menghitung total microsite dari model Microsite
-        $totalMicrosites = Microsite::count();
-        
-        // Mengambil data bidang dan seksi untuk form modal di dashboard
-        $bidang = Bidang::all();
-        $user  = User::all();
-
-        return view('admin.urls.index', compact('urls', 'bidang', 'users', 'totalUrls', 'totalMicrosites'));
+        // Kirimkan data ke view
+        return view('admin.urls.index', compact('urls', 'totalUrls', 'totalMicrosites'));
     }
 
     /**
@@ -45,11 +42,9 @@ class UrlShortenerController extends Controller
      */
     public function create()
     {
-        // Mengambil semua data Bidang dengan relasi Seksi-nya
-        $bidangWithUser = Bidang::with('users')->get();
-        return view('admin.urls.create', compact('bidangWithusers'));
+        $bidangWithSeksi = Bidang::with('seksi')->get();
+        return view('admin.urls.create', compact('bidangWithSeksi'));
     }
-
 
     /**
      * Menyimpan URL baru ke database.
@@ -59,45 +54,23 @@ class UrlShortenerController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
-            'shortlink' => 'nullable|string|alpha_dash|max:255|unique:url,short_url',
             'bidang_id' => 'required|exists:bidang,id',
-            'users_id' => 'required|exists:users,id',
+            'shortlink' => 'nullable|string|max:20|alpha_dash|unique:url,short_url',
         ]);
 
-            // Pastikan shortlink yang disimpan adalah yang diinputkan pengguna jika ada.
-            if (empty($request->shortlink)) {
-                $shortUrl = $this->generateUniqueShortUrl();
-            } else {
-                $shortUrl = $request->shortlink;
-            }
+        // Siapkan data untuk disimpan, termasuk users_id dari pengguna yang terautentikasi
+        $data = $request->except(['shortlink']);
+        $data['short_url'] = $request->input('shortlink') ?? Str::random(6);
+        $data['users_id'] = Auth::id(); // Mengambil ID pengguna yang sedang login
 
-        Url::create([
-            'title' => $request->title,
-            'original_url' => $request->original_url,
-            'bidang_id' => $request->bidang_id,
-            'users_id' => $request->users_id,
-            'short_url' => $shortUrl,
-        ]);
+        // Buat record URL baru
+        Url::create($data);
 
-            return redirect()->route('admin.urls.index')
-                                 ->with('success', 'URL berhasil ditambahkan.');
-
-        } catch (ValidationException $e) {
-            // Tangani error validasi
-            return redirect()->back()
-                             ->withErrors($e->errors())
-                             ->withInput();
-        } catch (Exception $e) {
-            // Tangani error lain, misalnya error database
-            // Log the error for debugging
-            // \Log::error('Error creating URL: ' . $e->getMessage());
-            return redirect()->back()
-                             ->with('error', 'Terjadi kesalahan saat menyimpan URL. Silakan coba lagi. Pesan Error: ' . $e->getMessage())
-                             ->withInput();
-        }
+        return redirect()->route('admin.urls.index')->with('success', 'URL berhasil dibuat!');
     }
 
     /**
@@ -108,13 +81,12 @@ class UrlShortenerController extends Controller
      */
     public function edit(Url $url)
     {
-        // Mengambil semua data Bidang dengan relasi Seksi-nya
         $bidangWithSeksi = Bidang::with('seksi')->get();
         return view('admin.urls.edit', compact('url', 'bidangWithSeksi'));
     }
 
     /**
-     * Memperbarui data URL di database.
+     * Memperbarui URL di database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Url  $url
@@ -122,26 +94,29 @@ class UrlShortenerController extends Controller
      */
     public function update(Request $request, Url $url)
     {
+        // Validasi input
         $request->validate([
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
-            'shortlink' => 'nullable|string|alpha_dash|max:255|unique:url,short_url,' . $url->id,
             'bidang_id' => 'required|exists:bidang,id',
-            'users_id' => 'required|exists:users,id',
-        ]);
-        
-        $shortUrl = $request->shortlink ?? $url->short_url;
-
-        $url->update([
-            'title' => $request->title,
-            'original_url' => $request->original_url,
-            'bidang_id' => $request->bidang_id,
-            'users_id' => $request->users_id,
-            'short_url' => $shortUrl,
+            'shortlink' => [
+                'nullable',
+                'string',
+                'max:20',
+                'alpha_dash',
+                Rule::unique('url', 'short_url')->ignore($url->id),
+            ],
         ]);
 
-        return redirect()->route('admin.urls.index')
-                             ->with('success', 'URL berhasil diperbarui.');
+        // Siapkan data untuk diperbarui, termasuk users_id dari pengguna yang terautentikasi
+        $data = $request->except(['shortlink']);
+        $data['short_url'] = $request->input('shortlink') ?? $url->short_url;
+        $data['users_id'] = Auth::id(); // Mengambil ID pengguna yang sedang login
+
+        // Perbarui record URL
+        $url->update($data);
+
+        return redirect()->route('admin.urls.index')->with('success', 'URL berhasil diperbarui!');
     }
 
     /**
@@ -153,91 +128,6 @@ class UrlShortenerController extends Controller
     public function destroy(Url $url)
     {
         $url->delete();
-        return redirect()->route('admin.urls.index')
-                             ->with('success', 'URL berhasil dihapus.');
-    }
-
-    /**
-     * Menampilkan form publik untuk membuat shortlink.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function generateForm()
-    {
-        $urls = Url::latest()->get();
-        return view('shortlink.index', compact('urls'));
-    }
-
-
-    /**
-     * Menghasilkan shortlink acak dan menyimpannya ke database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function generate(Request $request)
-    {
-        $request->validate([
-            'original_url' => 'required|url'
-        ]);
-
-        // Menggunakan helper untuk memastikan shortlink yang dihasilkan unik
-        $short = $this->generateUniqueShortUrl();
-
-        $url = Url::create([
-            'title' => 'Generated Shortlink',
-            'original_url' => $request->original_url,
-            'short_url' => $short,
-            'bidang_id' => null, // Mengatur ke null agar tidak memerlukan bidang/seksi
-            'seksi_id' => null,  // jika tidak disediakan
-            'user_id' => null,   // Mengatur ke null untuk shortlink publik
-        ]);
-
-        return back()->with('short_url', url($short));
-    }
-
-    /**
-     * Logika penyimpanan tambahan.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(Request $request)
-    {
-        // Jika form save memiliki validasi, bisa ditambahkan di sini.
-        return redirect()->route('shortlink.index')->with('success', 'Shortlink berhasil disimpan!');
-    }
-
-    /**
-     * Mengarahkan pengguna ke URL asli dari shortlink.
-     *
-     * @param  string  $short_url
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function redirectToOriginal($short_url)
-    {
-        $url = Url::where('short_url', $short_url)->first();
-
-        if (! $url) {
-            abort(404, 'Shortlink tidak ditemukan.');
-        }
-
-        return redirect()->away($url->original_url);
-    }
-    
-    /**
-     * Helper untuk menghasilkan shortlink unik.
-     *
-     * @param int $length
-     * @return string
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function generateUniqueShortUrl($length = 7)
-    {
-        do {
-            $shortUrl = Str::random($length);
-        } while (Url::where('short_url', $shortUrl)->exists());
-
-        return $shortUrl;
+        return redirect()->route('admin.urls.index')->with('success', 'URL berhasil dihapus!');
     }
 }

@@ -42,11 +42,11 @@
         </div>
 
         <!-- Links Section -->
-        @if($microsite->links->isNotEmpty())
+        @if($microsite->daftarLinks->isNotEmpty())
             <div class="space-y-4">
-                @foreach($microsite->links as $link)
+                @foreach($microsite->daftarLinks as $link)
                     <a href="{{ $link->original_link }}" target="_blank"
-                       class="link-card block w-full px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-xl font-semibold text-lg text-center border-b-2 border-blue-200">
+                    class="link-card block w-full px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-xl font-semibold text-lg text-center border-b-2 border-blue-200">
                         {{ $link->title }}
                     </a>
                 @endforeach
@@ -54,6 +54,7 @@
         @else
             <p class="text-center text-gray-500">Belum ada link yang ditambahkan.</p>
         @endif
+
 
     </div>
 </body>

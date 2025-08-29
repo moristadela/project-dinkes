@@ -1,4 +1,5 @@
 <?php
+// FILE: App/Models/Microsite.php
 
 namespace App\Models;
 
@@ -9,17 +10,38 @@ class Microsite extends Model
 {
     use HasFactory;
 
+    protected $table = 'microsites';
+
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'shortlink',
         'title',
+        'links',
         'bidang_id',
         'seksi_id',
+        'users_id',
     ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'links' => 'array',
+    ];
+
+    /**
+     * Get the user that owns the microsite.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
 
     /**
      * Get the bidang that owns the microsite.
@@ -37,11 +59,13 @@ class Microsite extends Model
         return $this->belongsTo(Seksi::class, 'seksi_id');
     }
 
-    /**
-     * Get the links for the microsite.
-     */
-    public function links()
+    // Microsite.php
+    public function daftarLinks()
     {
-        return $this->hasMany(DaftarLink::class);
+        return $this->hasMany(DaftarLink::class, 'microsite_id', 'id');
     }
+
+
+
+    
 }

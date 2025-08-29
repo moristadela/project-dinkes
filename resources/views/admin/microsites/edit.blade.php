@@ -1,3 +1,5 @@
+{{-- FILE: resources/views/admin/microsites/edit.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')
@@ -5,8 +7,9 @@
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Edit Microsite</h2>
-        <a href="{{ route('admin.microsites.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 transition-colors">
+        <h2 class="text-3xl font-bold text-gray-800">Edit Microsite: {{ $microsite->title }}</h2>
+        <a href="{{ route('admin.microsites.index') }}" 
+           class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 transition-colors">
             Kembali
         </a>
     </div>
@@ -52,61 +55,47 @@
                     <label for="title" class="block text-sm font-medium text-gray-700">Judul Microsite</label>
                     <input type="text" name="title" id="title"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('title') border-red-500 @enderror"
-                           placeholder="Contoh: Microsite Pelayanan Publik" value="{{ old('title', $microsite->title) }}" required>
+                           value="{{ old('title', $microsite->title) }}" required>
                     @error('title')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-                
+
                 <!-- Bidang & Seksi -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {{-- Bidang input (read-only) --}}
                     <div>
-                        <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
-                        <select id="bidang_id" name="bidang_id"
-                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('bidang_id') border-red-500 @enderror" required>
-                            <option value="">-- Pilih Bidang --</option>
-                            @foreach($allBidang as $bidang)
-                                <option value="{{ $bidang->id }}" {{ old('bidang_id', $microsite->bidang_id) == $bidang->id ? 'selected' : '' }}>
-                                    {{ $bidang->nama_bidang }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('bidang_id')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <label class="block text-sm font-medium text-gray-700">Bidang</label>
+                        {{-- Menampilkan nama bidang sebagai teks biasa --}}
+                        <p class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 bg-gray-100 text-gray-700">
+                            {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
+                        </p>
+                        {{-- Menyertakan input tersembunyi untuk mengirimkan ID bidang --}}
+                        <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
                     </div>
-                    <div>
-                        <label for="seksi_id" class="block text-sm font-medium text-gray-700">Seksi</label>
-                        <select id="seksi_id" name="seksi_id"
-                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('seksi_id') border-red-500 @enderror" required>
-                            <option value="">-- Pilih Seksi --</option>
-                        </select>
-                        @error('seksi_id')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+
+                    <!-- Field untuk Seksi (Read-only) -->
+                        <input type="hidden" name="users_id" value="{{ auth()->id() ?? '' }}">
                 </div>
 
                 <!-- Dynamic Links Fieldset -->
                 <fieldset class="border-t border-gray-200 pt-6">
                     <legend class="text-base font-medium text-gray-900">Link-link</legend>
-                    <p class="text-sm text-gray-500">Tambahkan, edit, atau hapus link yang ingin Anda tampilkan di microsite.</p>
+                    <p class="text-sm text-gray-500">Tambahkan link yang ingin Anda tampilkan di microsite.</p>
                     <div id="links-container" class="mt-4 space-y-4">
-                        <!-- Links loaded from DB -->
-                        @forelse($microsite->links as $index => $link)
+                        @forelse($microsite->links ?? [] as $index => $link)
                             <div class="flex items-end space-x-2 link-group">
-                                <input type="hidden" name="links[{{ $index }}][id]" value="{{ $link->id }}">
                                 <div class="flex-1">
                                     <label for="links[{{ $index }}][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                                     <input type="text" name="links[{{ $index }}][title]" id="links[{{ $index }}][title]"
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           value="{{ old('links.'.$index.'.title', $link->title) }}" placeholder="Contoh: WhatsApp">
+                                           value="{{ old('links.'.$index.'.title', $link['title'] ?? '') }}" placeholder="Contoh: WhatsApp">
                                 </div>
                                 <div class="flex-1">
                                     <label for="links[{{ $index }}][url]" class="block text-sm font-medium text-gray-700">URL</label>
                                     <input type="url" name="links[{{ $index }}][url]" id="links[{{ $index }}][url]"
                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           value="{{ old('links.'.$index.'.url', $link->original_link) }}" placeholder="https://wa.me/...">
+                                           value="{{ old('links.'.$index.'.url', $link['url'] ?? '') }}" placeholder="https://wa.me/...">
                                 </div>
                                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -119,14 +108,12 @@
                                 <div class="flex-1">
                                     <label for="links[0][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                                     <input type="text" name="links[0][title]" id="links[0][title]"
-                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           placeholder="Contoh: WhatsApp">
+                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                 </div>
                                 <div class="flex-1">
                                     <label for="links[0][url]" class="block text-sm font-medium text-gray-700">URL</label>
                                     <input type="url" name="links[0][url]" id="links[0][url]"
-                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                           placeholder="https://wa.me/...">
+                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                 </div>
                                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -136,18 +123,17 @@
                             </div>
                         @endforelse
                     </div>
-                    <button type="button" id="add-link-btn" class="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-md hover:bg-indigo-700 transition-colors">
+                    <button type="button" id="add-link-btn" 
+                            class="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-md hover:bg-indigo-700 transition-colors">
                         + Tambah Link
                     </button>
                 </fieldset>
 
-                <!-- Action Buttons -->
-                <div class="flex justify-end space-x-4 pt-6">
-                    <a href="{{ route('admin.microsites.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-md text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
-                        Batal
-                    </a>
-                    <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition-colors">
-                        Perbarui
+                <!-- Submit Button -->
+                <div class="pt-6">
+                    <button type="submit" 
+                            class="w-full px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors">
+                        Perbarui Microsite
                     </button>
                 </div>
             </div>
@@ -156,46 +142,16 @@
 </div>
 
 <script>
-    // Data bidang dan seksi dari PHP
-    const allBidang = @json($allBidang);
-    const microsite = @json($microsite);
-    
+    const allBidang = @json($bidangWithSeksi);
+    const oldSeksiId = '{{ old('seksi_id', $microsite->seksi_id) }}';
+
     document.addEventListener('DOMContentLoaded', function() {
         const bidangSelect = document.getElementById('bidang_id');
         const seksiSelect = document.getElementById('seksi_id');
         const linksContainer = document.getElementById('links-container');
         const addLinkBtn = document.getElementById('add-link-btn');
+        let linkIndex = linksContainer.querySelectorAll('.link-group').length;
 
-        // Fungsi untuk menambahkan link field
-        function addLinkField() {
-            const links = linksContainer.querySelectorAll('.link-group');
-            const newIndex = links.length;
-
-            const newLinkGroup = document.createElement('div');
-            newLinkGroup.classList.add('flex', 'items-end', 'space-x-2', 'link-group');
-            newLinkGroup.innerHTML = `
-                <div class="flex-1">
-                    <label for="links[${newIndex}][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
-                    <input type="text" name="links[${newIndex}][title]" id="links[${newIndex}][title]"
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           placeholder="Contoh: WhatsApp">
-                </div>
-                <div class="flex-1">
-                    <label for="links[${newIndex}][url]" class="block text-sm font-medium text-gray-700">URL</label>
-                    <input type="url" name="links[${newIndex}][url]" id="links[${newIndex}][url]"
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           placeholder="https://wa.me/...">
-                </div>
-                <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-            `;
-            linksContainer.appendChild(newLinkGroup);
-        }
-
-        // Populate seksi dropdown based on selected bidang
         function populateSeksi() {
             const selectedBidangId = bidangSelect.value;
             seksiSelect.innerHTML = '<option value="">-- Pilih Seksi --</option>';
@@ -206,8 +162,7 @@
                         const option = document.createElement('option');
                         option.value = seksi.id;
                         option.textContent = seksi.nama_seksi;
-                        // Set selected option if old or existing value matches
-                        if (microsite.seksi_id === seksi.id) {
+                        if (oldSeksiId == seksi.id) {
                             option.selected = true;
                         }
                         seksiSelect.appendChild(option);
@@ -216,23 +171,38 @@
             }
         }
 
-        // Event Listeners
+        function addLinkField() {
+            const newLinkGroup = document.createElement('div');
+            newLinkGroup.classList.add('flex', 'items-end', 'space-x-2', 'link-group');
+            newLinkGroup.innerHTML = `
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700">Judul Link</label>
+                    <input type="text" name="links[${linkIndex}][title]" 
+                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700">URL</label>
+                    <input type="url" name="links[${linkIndex}][url]" 
+                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                </div>
+                <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            `;
+            linksContainer.appendChild(newLinkGroup);
+            linkIndex++;
+        }
+
         bidangSelect.addEventListener('change', populateSeksi);
         addLinkBtn.addEventListener('click', addLinkField);
         linksContainer.addEventListener('click', (event) => {
             if (event.target.closest('.remove-link-btn')) {
-                const linkGroup = event.target.closest('.link-group');
-                linkGroup.remove();
-                // Re-index the remaining fields
-                linksContainer.querySelectorAll('.link-group').forEach((group, index) => {
-                    group.querySelector('input[name*="[id]"]').name = `links[${index}][id]`;
-                    group.querySelector('input[name*="[title]"]').name = `links[${index}][title]`;
-                    group.querySelector('input[name*="[url]"]').name = `links[${index}][url]`;
-                });
+                event.target.closest('.link-group').remove();
             }
         });
 
-        // Initial calls
         populateSeksi();
     });
 </script>

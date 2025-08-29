@@ -47,8 +47,7 @@ Route::middleware(['auth'])
         Route::resource('seksi', SeksiController::class);
 
         // Microsites
-        Route::resource('microsites', MicrositeController::class)
-            ->names('microsites');
+        Route::resource('microsites', MicrositeController::class)->middleware('auth');
     });
 
 
@@ -70,7 +69,7 @@ Route::prefix('shortlink')->name('shortlink.')->group(function () {
 require __DIR__.'/auth.php';
 
 // Rute untuk menampilkan microsite
-Route::get('/m/{shortlink}', [MicrositeController::class, 'show'])->name('microsite.show');
+Route::get('/m/{shortlink}', [MicrositeController::class, 'showPublic'])->name('microsite.show');
 
 // Redirect short URL
 Route::get('/{short_url}', [UrlShortenerController::class, 'redirectToOriginal'])

@@ -1,3 +1,5 @@
+{{-- FILE: resources/views/admin/urls/index.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')
@@ -9,20 +11,16 @@
             <!-- Card Total Shortlink -->
             <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-500">Total Shortlink</h3>
+                    <h3 class="text-lg font-semibold text-gray-500">Total Shortlink Anda</h3>
                     <p class="text-2xl font-bold text-blue-600">{{ $totalUrls }}</p>
-                </div>
-                <div class="text-blue-600">
                 </div>
             </div>
 
             <!-- Card Total Microsite -->
             <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-500">Total Microsite</h3>
+                    <h3 class="text-lg font-semibold text-gray-500">Total Microsite Anda</h3>
                     <p class="text-2xl font-bold text-green-600">{{ $totalMicrosites }}</p>
-                </div>
-                <div class="text-green-600">
                 </div>
             </div>
         </div>
@@ -36,7 +34,7 @@
 
                 <div class="flex">
                     <input type="text" placeholder="Search"
-                        class="border rounded-l-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm">
+                           class="border rounded-l-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm">
                     <button class="px-4 py-2 bg-green-600 text-white rounded-r-md hover:bg-green-700 transition text-sm">
                         Search
                     </button>
@@ -52,8 +50,8 @@
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Short URL</th>
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Original URL</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Bidang</th>
                             <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Seksi</th>
+                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Bidang</th>
                             <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Created</th>
                             <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Updated</th>
                             <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
@@ -69,33 +67,32 @@
                                 <td class="px-4 py-2 text-sm text-blue-600">
                                     <a href="{{ $url->original_url }}" target="_blank">{{ Str::limit($url->original_url, 40) }}</a>
                                 </td>
+                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->user->name ?? 'N/A' }}</td>
                                 <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->bidang->nama_bidang ?? 'N/A' }}</td>
-                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->seksi->nama_seksi ?? 'N/A' }}</td>
                                 <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->created_at->format('d M Y') }}</td>
                                 <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->updated_at->format('d M Y') }}</td>
                                 <td class="px-4 py-2">
                                     <div class="flex items-center justify-center gap-2">
-
                                         {{-- Edit --}}
                                         <a href="{{ route('admin.urls.edit', $url->id) }}"
-                                            class="inline-flex items-center justify-center w-14 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                                            title="Edit">Edit</a>
+                                           class="inline-flex items-center justify-center w-14 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                           title="Edit">Edit</a>
 
                                         {{-- Delete --}}
                                         <form action="{{ route('admin.urls.destroy', $url->id) }}" method="POST"
-                                            onsubmit="return confirm('Yakin hapus data ini?')">
+                                              onsubmit="return confirm('Yakin hapus data ini?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="inline-flex items-center justify-center w-14 h-8 bg-red-600 text-white rounded hover:bg-red-700"
-                                                title="Hapus">Delete</button>
+                                                    class="inline-flex items-center justify-center w-14 h-8 bg-red-600 text-white rounded hover:bg-red-700"
+                                                    title="Hapus">Delete</button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-4 py-6 text-center text-sm text-gray-500">Belum ada data.</td>
+                                <td colspan="9" class="px-4 py-6 text-center text-sm text-gray-500">Belum ada data.</td>
                             </tr>
                         @endforelse
                     </tbody>
