@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Url;
 use App\Models\Bidang;
+use App\Models\Microsite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -18,20 +19,21 @@ class UrlShortenerController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    
     public function index()
     {
-            // Ambil URL hanya untuk pengguna yang sedang login, dengan relasi Bidang, Seksi, dan User
+        // Ambil URL hanya untuk pengguna yang sedang login
         $urls = Url::with(['bidang', 'seksi', 'user'])
-                   ->where('users_id', Auth::id())
-                   ->paginate(10); // Menggunakan paginate untuk performa
+                    ->where('users_id', Auth::id())
+                    ->paginate(10); 
 
-        // Ambil total URL dan Microsite (contoh, sesuaikan dengan definisi microsite Anda)
-        $totalUrls = $urls->total(); // Mengambil total dari pagination
-        $totalMicrosites = Url::where('users_id', Auth::id())
-                                ->whereNotNull('title') 
-                                ->count();
-        
-        // Kirimkan data ke view
+        // Ambil total URL dari pagination
+        $totalUrls = $urls->total();
+
+        // Ambil jumlah total microsite milik user yang sedang login
+        $totalMicrosites = Microsite::where('users_id', Auth::id())->count();
+
+        // Kirimkan semua data ke view
         return view('admin.urls.index', compact('urls', 'totalUrls', 'totalMicrosites'));
     }
 

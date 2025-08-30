@@ -23,7 +23,8 @@
                         <table class="w-full border border-gray-200 rounded-lg">
                             <thead>
                                 <tr class="bg-gray-100 text-left">
-                                    <th class="px-4 py-2 border">Nama</th>
+                                    <th class="px-4 py-2 border">Seksi</th>
+                                    <th class="px-4 py-2 border">Bidang</th>
                                     <th class="px-4 py-2 border">Username</th>
                                     <th class="px-4 py-2 border">Role</th>
                                     <th class="px-4 py-2 border text-center">Aksi</th>
@@ -32,7 +33,12 @@
                             <tbody>
                                 @forelse($users as $user)
                                     <tr>
+                                        {{-- Menampilkan nama seksi dari kolom 'name' --}}
                                         <td class="px-4 py-2 border">{{ $user->name }}</td>
+                                        {{-- Menampilkan nama bidang dari relasi user --}}
+                                        <td class="px-4 py-2 border">
+                                            {{ $user->bidang ? $user->bidang->nama_bidang : 'Tidak ada' }}
+                                        </td>
                                         <td class="px-4 py-2 border">{{ $user->username }}</td>
                                         <td class="px-4 py-2 border">{{ ucfirst($user->role) }}</td>
                                         <td class="px-4 py-2 border text-center space-x-2">
@@ -50,7 +56,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="px-4 py-2 border text-center text-gray-500">Belum ada user</td>
+                                        <td colspan="5" class="px-4 py-2 border text-center text-gray-500">Belum ada user</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -80,7 +86,7 @@
                             <form action="{{ route('admin.users.store') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label class="block text-sm font-medium">Nama</label>
+                                    <label class="block text-sm font-medium">Seksi</label>
                                     <input type="text" name="name" class="w-full border rounded p-2" required>
                                 </div>
                                 <div class="mb-3">
@@ -102,8 +108,8 @@
                                         <option value="user" selected>User</option>
                                     </select>
                                 </div>
-
-                                {{-- TAMBAHAN INPUT BIDANG DI SINI --}}
+                                
+                                {{-- Input Bidang --}}
                                 <div class="mb-3">
                                     <label class="block text-sm font-medium">Bidang</label>
                                     <select name="bidang_id" class="w-full border rounded p-2" required>

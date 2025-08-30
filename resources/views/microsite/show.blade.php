@@ -38,7 +38,7 @@
             <h1 class="text-3xl font-bold mb-2 text-gray-900">{{ $microsite->title }}</h1>
             <p class="text-sm font-medium text-gray-500">
                 {{-- Gunakan pengecekan untuk menghindari error jika bidang atau seksi null --}}
-                {{ optional($microsite->bidang)->nama_bidang ?? 'Tidak Ada Bidang' }} / {{ optional($microsite->seksi)->nama_seksi ?? 'Tidak Ada Seksi' }}
+                {{ optional($microsite->bidang)->nama_bidang ?? 'Tidak Ada Bidang' }} / {{ optional($microsite->user)->name ?? 'Tidak Ada Seksi' }}
             </p>
         </div>
 

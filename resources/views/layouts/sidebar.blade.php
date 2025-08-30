@@ -5,20 +5,9 @@
     
     <nav class="p-4 space-y-2">
         <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Dashboard</a>
-        <a href="{{ route('admin.microsites.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Microsite</a>
-        
-    {{-- Dropdown URLs --}}
-    <div>
-        <button @click="openUser = !openUser" 
-            class="flex justify-between items-center w-full px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">
-            <span>Daftar URLs</span>
-            <span x-text="openUser ? '▲' : '▼'"></span>
-        </button>
-        <div x-show="openUser" x-cloak class="ml-4 mt-1 space-y-1">
-            <a href="{{ route('admin.bidang.index') }}" class="block px-3 py-1 rounded hover:bg-blue-100 transition duration-150">Bidang</a>
-            <a href="{{ route('admin.seksi.index') }}" class="block px-3 py-1 rounded hover:bg-blue-100 transition duration-150">Seksi</a>
-        </div>
-    </div>
+        <a href="{{ route(name: 'admin.microsites.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Microsite</a>
+        <a href="{{ route(name: 'admin.bidang.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">Daftar Bidang</a>
+
 
         <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-blue-100 transition duration-150">User Management</a>
     </nav>

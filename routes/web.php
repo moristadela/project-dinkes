@@ -36,7 +36,7 @@ Route::middleware(['auth'])
         // Admin Dashboard
         Route::get('/dashboard', [UrlShortenerController::class, 'index'])->name('dashboard');
 
-        // CRUD URL Shortener
+        // URL Shortener
         Route::resource('urls', UrlShortenerController::class)->names('urls');
 
         // Management User

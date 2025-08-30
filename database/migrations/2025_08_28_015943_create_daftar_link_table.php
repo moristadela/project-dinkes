@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('daftar_link', function (Blueprint $table) {
             $table->id();
             $table->foreignId('microsite_id')->constrained()->onDelete('cascade');
-            $table->string('shortlink')->unique();
+            $table->string('shortlink');
             $table->text('original_link');
             $table->string('title');
             $table->timestamps();
