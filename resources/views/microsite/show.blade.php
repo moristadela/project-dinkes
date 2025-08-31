@@ -10,8 +10,6 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            /* Warna biru terang untuk nuansa formal */
-            background-color: #ffffffff; 
         }
         .link-card {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -23,14 +21,13 @@
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen text-gray-800 p-4">
-    <div class="w-full max-w-sm mx-auto p-8 rounded-2xl shadow-xl bg-white border border-gray-200 transform transition-transform duration-300 hover:scale-105">
+<body class="bg-gradient-to-br from-green-50 to-blue-100 min-h-screen flex items-center justify-center text-gray-800 p-4">
+    <div class="w-full max-w-sm mx-auto p-8 rounded-2xl shadow-xl bg-white border border-gray-200 transform transition-transform duration-300 hover:scale-[1.01]">
 
         {{-- Logo --}}
-        <div class="flex justify-center mb-8">
-            <!-- Ganti URL placeholder dengan URL logo Dinas Kesehatan Anda -->
-             <img src="https://jatengprov.go.id/wp-content/uploads/2025/02/logo-jateng-ngopeni-nglakoni.png" alt="Logo Jateng Ngopeni" class="w-32 h-32 shadow-lg border-4 border-white transform transition-transform duration-300 hover:scale-110">
-            <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" alt="Logo Dinas Kesehatan" class="w-32 h-32 rounded-full shadow-lg border-4 border-white transform transition-transform duration-300 hover:scale-110">
+        <div class="flex justify-center gap-x-4 mb-8">
+            <img src="https://jatengprov.go.id/wp-content/uploads/2025/02/logo-jateng-ngopeni-nglakoni.png" alt="Logo Jateng Ngopeni" class="w-24 h-24 sm:w-28 sm:h-28 shadow-lg transform transition-transform duration-300 hover:scale-110">
+            <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" alt="Logo Dinas Kesehatan" class="w-24 h-24 sm:w-28 sm:h-28 shadow-lg transform transition-transform duration-300 hover:scale-110">
         </div>
 
         <!-- Microsite Header -->
@@ -47,7 +44,7 @@
             <div class="space-y-4">
                 @foreach($microsite->daftarLinks as $link)
                     <a href="{{ $link->original_link }}" target="_blank"
-                    class="link-card block w-full px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-xl font-semibold text-lg text-center border-b-2 border-blue-200">
+                    class="link-card block w-full px-6 py-4 bg-blue-50 text-blue-700 ring-2 ring-blue-200 rounded-2xl font-semibold text-lg text-center">
                         {{ $link->title }}
                     </a>
                 @endforeach
@@ -55,7 +52,6 @@
         @else
             <p class="text-center text-gray-500">Belum ada link yang ditambahkan.</p>
         @endif
-
 
     </div>
 </body>

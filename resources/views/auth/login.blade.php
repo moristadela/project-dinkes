@@ -43,11 +43,9 @@
                 <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" class="h-20 w-auto" alt="Logo Dinkes Jateng" />
             </div>
             <!-- Title -->
-            <h1 class="text-3xl font-bold text-gray-800 leading-tight">Dinas Kesehatan Provinsi Jawa Tengah</h1>
+            <h1 class="text-xl font-bold text-gray-800 leading-tight">Dinas Kesehatan Provinsi Jawa Tengah</h1>
         </div>
         
-        <p class="text-center text-gray-600 mb-6">Silakan masuk untuk melanjutkan ke Dashboard.</p>
-
         <!-- Form Section -->
         <form method="POST" action="{{ route('login') }}" class="space-y-4">
             @csrf

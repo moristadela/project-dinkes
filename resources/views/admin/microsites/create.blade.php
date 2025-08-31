@@ -31,25 +31,23 @@
             @csrf
 
             <div class="space-y-6">
-                <!-- Shortlink -->
-                <div>
-                    <label for="shortlink" class="block text-sm font-medium text-gray-700">Shortlink</label>
-                    <div class="mt-1 relative rounded-lg shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500 sm:text-sm">s.id/</span>
-                        </div>
-                        <input type="text" name="shortlink" id="shortlink"
-                               class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg @error('shortlink') border-red-500 @enderror"
-                               placeholder="nama-microsite" value="{{ old('shortlink') }}" required>
-                    </div>
-                    @error('shortlink')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+            {{--Nama Microsite--}}
+            <div>
+                <label for="shortlink" class="block text-sm font-semibold text-gray-700">Nama Microsite</label>
+                <div class="mt-1 flex rounded-lg shadow-sm">
+                    <span class="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-500 text-sm">
+                        {{ url('/m') }}/
+                    </span>
+                    <input type="text" name="shortlink" id="shortlink" class="flex-1 block w-full rounded-r-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 transition-colors duration-200" placeholder="nama-microsite" value="{{ old('shortlink') }}" required>
                 </div>
+                @error('shortlink')
+                    <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <!-- Title -->
+               {{--Kegiatan--}}
                 <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700">Judul Microsite</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Kegiatan</label>
                     <input type="text" name="title" id="title"
                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('title') border-red-500 @enderror"
                            value="{{ old('title') }}" required>
@@ -77,8 +75,7 @@
 
                 <!-- Dynamic Links Fieldset -->
                 <fieldset class="border-t border-gray-200 pt-6">
-                    <legend class="text-base font-medium text-gray-900">Link-link</legend>
-                    <p class="text-sm text-gray-500">Tambahkan link yang ingin Anda tampilkan di microsite.</p>
+                    <legend class="text-base font-medium text-gray-900">Daftar Link</legend>
                     <div id="links-container" class="mt-4 space-y-4">
                         @if(old('links'))
                             @foreach(old('links') as $index => $link)

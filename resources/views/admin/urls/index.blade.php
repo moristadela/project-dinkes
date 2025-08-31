@@ -1,81 +1,84 @@
-{{-- FILE: resources/views/admin/urls/index.blade.php --}}
-
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-7xl mx-auto p-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Daftar URL</h1>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Daftar URL</h1>
 
-        <!-- Cards untuk total shortlink dan microsite -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            <!-- Card Total Shortlink -->
-            <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-3xl shadow-lg p-6 flex items-center space-x-4 transition-transform duration-300 transform hover:scale-105">
+                <div class="flex-shrink-0 bg-blue-100 text-blue-600 rounded-full p-3">
+                    <i class="fas fa-link fa-xl"></i>
+                </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-500">Total Shortlink Anda</h3>
-                    <p class="text-2xl font-bold text-blue-600">{{ $totalUrls }}</p>
+                    <h3 class="text-lg font-semibold text-gray-500">Jumlah Shortlink</h3>
+                    <p class="text-3xl font-extrabold text-blue-700">{{ $totalUrls }}</p>
                 </div>
             </div>
 
-            <!-- Card Total Microsite -->
-            <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
+            <div class="bg-white rounded-3xl shadow-lg p-6 flex items-center space-x-4 transition-transform duration-300 transform hover:scale-105">
+                <div class="flex-shrink-0 bg-green-100 text-green-600 rounded-full p-3">
+                    <i class="fas fa-list-alt fa-xl"></i>
+                </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-500">Total Microsite Anda</h3>
-                    <p class="text-2xl font-bold text-green-600">{{ $totalMicrosites }}</p>
+                    <h3 class="text-lg font-semibold text-gray-500">Jumlah Microsite</h3>
+                    <p class="text-3xl font-extrabold text-green-700">{{ $totalMicrosites }}</p>
                 </div>
             </div>
         </div>
-
-        <div class="bg-white shadow-sm rounded-lg p-4 py-2">
-
-            <div x-data="{ open: false }" class="flex justify-between items-center mb-4">
-                <a href="{{ route('admin.urls.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-                    New
+        
+        <div class="bg-white shadow-lg rounded-3xl p-6">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <a href="{{ route('admin.urls.create') }}" class="w-full md:w-auto px-6 py-3 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 transition-colors mb-4 md:mb-0 transform hover:-translate-y-1">
+                    <i class="fas fa-plus mr-2"></i> Buat URL Baru
                 </a>
-
-                <div class="flex">
-                    <input type="text" placeholder="Search"
-                           class="border rounded-l-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm">
-                    <button class="px-4 py-2 bg-green-600 text-white rounded-r-md hover:bg-green-700 transition text-sm">
-                        Search
+                <div class="w-full md:w-1/3 flex">
+                    <input type="text" placeholder="Cari URL..."
+                           class="flex-1 border border-gray-300 rounded-l-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+                    <button class="px-5 py-2 bg-blue-600 text-white rounded-r-full hover:bg-blue-700 transition-colors text-sm">
+                        <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
 
-            <h2 class="text-lg font-semibold text-gray-800 mb-3">URL List</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Daftar URL yang Ada</h2>
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full border border-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-blue-50">
                         <tr>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Short URL</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Original URL</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Seksi</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Bidang</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Created</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Updated</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Judul</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">URL Singkat</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">URL Asli</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Seksi</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Bidang</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Dibuat</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Diperbarui</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($urls as $url)
-                            <tr>
-                                <td class="px-4 py-2 text-sm text-gray-700">{{ $url->title }}</td>
-                                <td class="px-4 py-2 text-sm text-blue-600">
-                                    <a href="{{ url($url->short_url) }}" target="_blank">{{ $url->short_url }}</a>
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ $url->title }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <a href="{{ url($url->short_url) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                                        {{ $url->short_url }}
+                                    </a>
                                 </td>
-                                <td class="px-4 py-2 text-sm text-blue-600">
-                                    <a href="{{ $url->original_url }}" target="_blank">{{ Str::limit($url->original_url, 40) }}</a>
+                                <td class="px-6 py-4 text-sm break-all">
+                                    <a href="{{ $url->original_url }}" target="_blank" class="text-blue-600 hover:text-blue-800" title="{{ $url->original_url }}">
+                                        {{ Str::limit($url->original_url, 60) }}
+                                    </a>
                                 </td>
-                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->user->name ?? 'N/A' }}</td>
-                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->bidang->nama_bidang ?? 'N/A' }}</td>
-                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->created_at->format('d M Y') }}</td>
-                                <td class="px-4 py-2 text-center text-sm text-gray-500">{{ $url->updated_at->format('d M Y') }}</td>
-                                <td class="px-4 py-2">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{{ $url->user->name ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{{ $url->bidang->nama_bidang ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{{ $url->created_at->format('d M Y') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{{ $url->updated_at->format('d M Y') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex items-center justify-center gap-2">
                                         {{-- Edit --}}
                                         <a href="{{ route('admin.urls.edit', $url->id) }}"
-                                           class="inline-flex items-center justify-center w-14 h-8 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                           class="inline-flex items-center justify-center w-16 h-8 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors transform hover:-translate-y-0.5"
                                            title="Edit">Edit</a>
 
                                         {{-- Delete --}}
@@ -84,15 +87,15 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                    class="inline-flex items-center justify-center w-14 h-8 bg-red-600 text-white rounded hover:bg-red-700"
-                                                    title="Hapus">Delete</button>
+                                                    class="inline-flex items-center justify-center w-16 h-8 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors transform hover:-translate-y-0.5"
+                                                    title="Hapus">Hapus</button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="px-4 py-6 text-center text-sm text-gray-500">Belum ada data.</td>
+                                <td colspan="9" class="px-6 py-8 text-center text-gray-500 italic">Belum ada data. Tambahkan URL baru untuk mulai. </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -100,9 +103,11 @@
             </div>
 
             {{-- pagination kalau pakai paginate() --}}
-            <div class="mt-4">
-                {{ $urls->links() }}
-            </div>
+            @if($urls->hasPages())
+                <div class="mt-6">
+                    {{ $urls->links() }}
+                </div>
+            @endif
         </div>
     </div>
 @endsection
