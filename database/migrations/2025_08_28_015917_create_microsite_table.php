@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('microsites', function (Blueprint $table) {
             $table->id();
             $table->string('shortlink')->unique();
-            $table->string('title');
             $table->foreignId('bidang_id')->constrained('bidang')->onDelete('cascade');
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->date('tanggal');
             $table->timestamps();
         });
     }

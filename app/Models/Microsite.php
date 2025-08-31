@@ -19,6 +19,11 @@ class Microsite extends Model
         'title',
         'bidang_id',
         'users_id',
+        'tanggal',
+    ];
+
+    protected $casts = [
+        'tanggal' => 'date', 
     ];
 
     /**

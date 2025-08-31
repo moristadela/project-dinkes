@@ -18,8 +18,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
-        $bidangs = Bidang::all(); // Mengambil semua data bidang
+        $users = User::latest()->get();
+        $bidangs = Bidang::all(); 
         return view('admin.users.index', compact('users', 'bidangs'));
     }
 

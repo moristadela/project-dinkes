@@ -39,18 +39,19 @@ class MicrositeController extends Controller
             ],
             'title' => 'required|string|max:255',
             'bidang_id' => 'required|exists:bidang,id',
+            'tanggal' => 'required|date',
             'links.*.title' => 'nullable|string|max:255',
             'links.*.url' => 'required_with:links.*.title|nullable|url|max:2048',
         ]);
 
         // 2. Buat data microsite utama
-        $micrositeData = $request->only(['shortlink', 'title', 'bidang_id']);
+        $micrositeData = $request->only(['shortlink', 'title', 'bidang_id', 'tanggal']);
         $micrositeData['users_id'] = Auth::id();
 
         // 3. Buat microsite dan simpan hasilnya ke dalam variabel
         $microsite = Microsite::create($micrositeData);
 
-        // 4. (INI BAGIAN BARU) Tambahkan logika untuk menyimpan link
+        // 4. Tambahkan logika untuk menyimpan link
         if ($request->has('links') && is_array($request->links)) {
             foreach ($request->links as $link) {
                 // Pastikan URL tidak kosong sebelum menyimpan
@@ -93,6 +94,7 @@ class MicrositeController extends Controller
             ],
             'title' => 'required|string|max:255',
             'bidang_id' => 'required|exists:bidang,id',
+            'tanggal' => 'required|date',
             'links.*.url' => 'nullable|url',
             'links.*.title' => 'nullable|string|max:255',
         ]);
@@ -102,16 +104,14 @@ class MicrositeController extends Controller
             'shortlink' => $request->shortlink,
             'title' => $request->title,
             'bidang_id' => $request->bidang_id,
+            'tanggal' => $request->tanggal,
         ]);
 
-        // Update links
         if ($request->has('links') && is_array($request->links)) {
-            // Hapus link lama
             $microsite->daftarLinks()->delete();
 
-            // Tambahkan link baru
             foreach ($request->links as $link) {
-                if (!empty($link['url'])) { // hanya insert jika URL ada
+                if (!empty($link['url'])) { 
                     $microsite->daftarLinks()->create([
                         'original_link' => $link['url'],
                         'title' => $link['title'] ?? null,
