@@ -39,9 +39,15 @@
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold mb-2 text-gray-900">{{ $microsite->title }}</h1>
 
-            <p class="text-sm font-medium text-gray-500">
-                {{ optional($microsite->bidang)->nama_bidang ?? 'Tidak Ada Bidang' }} / {{ optional($microsite->user)->name ?? 'Tidak Ada Seksi' }}
-            </p>
+            <div class="mt-2 space-y-1">
+                <p class="text-sm font-medium text-gray-500">
+                    {{ optional($microsite->bidang)->nama_bidang ?? 'Tidak Ada Bidang' }}
+                </p>
+                <p class="text-sm font-medium text-gray-500">
+                    {{ optional($microsite->user)->name ?? 'Tidak Ada Seksi' }}
+                </p>
+            </div>
+
 
             {{-- Tanggal Kegiatan --}}
             <p class="mt-2 text-sm font-semibold text-gray-600">
