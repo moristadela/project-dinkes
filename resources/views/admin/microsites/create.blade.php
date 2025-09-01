@@ -113,9 +113,9 @@
                     {{-- Tanggal Kegiatan --}}
                     <div>
                         <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal Kegiatan</label>
-                        <input type="date" name="tanggal" id="tanggal" 
+                        <input type="text" name="tanggal" id="tanggal" 
                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('tanggal') border-red-500 @enderror" 
-                               value="{{ old('tanggal') }}" required>
+                               value="{{ old('tanggal') }}"placeholder="misal 17 Agustus 1945" required>
                         @error('tanggal')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror

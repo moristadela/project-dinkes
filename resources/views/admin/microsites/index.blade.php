@@ -80,7 +80,7 @@
                                     {{ $microsite->bidang->nama_bidang ?? '-' }}
                                 </td>
                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                     {{ \Carbon\Carbon::parse($microsite->tanggal)->format('d M Y') }}
+                                     {{ $microsite->tanggal }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $microsite->created_at->format('d M Y') }}

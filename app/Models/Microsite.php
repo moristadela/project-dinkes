@@ -22,10 +22,6 @@ class Microsite extends Model
         'tanggal',
     ];
 
-    protected $casts = [
-        'tanggal' => 'datetime', 
-    ];
-
     /**
      * Get the bidang that owns the microsite.
      */

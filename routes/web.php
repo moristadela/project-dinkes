@@ -47,7 +47,7 @@ Route::middleware(['auth'])
         Route::resource('seksi', SeksiController::class);
 
         // Microsites
-        Route::resource('microsites', MicrositeController::class)->middleware('auth');
+        Route::resource('microsites', MicrositeController::class);
     });
 
 

@@ -28,7 +28,7 @@
         <div class="flex justify-center gap-x-4 mb-8">
             <img src="https://jatengprov.go.id/wp-content/uploads/2025/02/logo-jateng-ngopeni-nglakoni.png" 
                  alt="Logo Jateng Ngopeni" 
-                 class="w-20 h-20 sm:w-24 sm:h-24 shadow-md rounded-lg transform transition-transform duration-300 hover:scale-110">
+                 class="w-36 h-20 sm:w-36 sm:h-24 shadow-md rounded-lg transform transition-transform duration-300 hover:scale-110">
             
             <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" 
                  alt="Logo Dinas Kesehatan" 

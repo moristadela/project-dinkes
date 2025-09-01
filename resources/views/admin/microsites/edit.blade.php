@@ -61,22 +61,40 @@
                 {{-- Tanggal Kegiatan --}}
                 <div>
                     <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal Kegiatan</label>
-                    <input type="date" name="tanggal" id="tanggal" 
+                    <input type="text" name="tanggal" id="tanggal" 
                         class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 @error('tanggal') border-red-500 @enderror" 
-                        value="{{ old('tanggal', \Carbon\Carbon::parse($microsite->tanggal)->format('Y-m-d')) }}" required>
+                        value="{{ old('tanggal', $microsite->tanggal) }}" required>
                     @error('tanggal')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- Bidang --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Bidang</label>
-                    <div class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 bg-gray-100 text-gray-700">
+                @if(auth()->user()->role === 'admin')
+                    <!-- Dropdown untuk admin -->
+                    <select name="bidang_id" id="bidang_id"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                            focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <option value="" hidden>-- Pilih Bidang --</option>
+                        @foreach($bidangWithSeksi as $bidang)
+                            <option value="{{ $bidang->id }}"
+                                {{ old('bidang_id', $url->bidang_id ?? '') == $bidang->id ? 'selected' : '' }}>
+                                {{ $bidang->nama_bidang }}
+                            </option>
+                        @endforeach
+
+                    </select>
+                    @error('bidang_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                @else
+                    <!-- Read only untuk user biasa -->
+                    <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                px-3 py-2 bg-gray-100 text-gray-600 sm:text-sm">
                         {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
                     </div>
                     <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
-                </div>
+                @endif
 
                 <!-- Dynamic Links Fieldset -->
                 <fieldset class="border-t border-gray-200 pt-6">
