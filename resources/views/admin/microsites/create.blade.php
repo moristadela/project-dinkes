@@ -58,7 +58,7 @@
 
                 <!-- Bidang & Seksi -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {{-- Bidang input (read-only) --}}
+                    {{-- Bidang (read-only) --}}
                     <div>
                         <label for ="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
                         {{-- Menampilkan nama bidang sebagai teks biasa --}}
@@ -69,7 +69,7 @@
                         <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
                     </div>
 
-                    <!-- Field untuk Seksi (Read-only) -->
+                    <!-- Seksi (Read-only) -->
                         <input type="hidden" name="users_id" value="{{ auth()->id() ?? '' }}">
                 </div>
 
