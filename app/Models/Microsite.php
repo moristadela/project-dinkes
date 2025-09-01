@@ -23,7 +23,7 @@ class Microsite extends Model
     ];
 
     protected $casts = [
-        'tanggal' => 'date', 
+        'tanggal' => 'datetime', 
     ];
 
     /**

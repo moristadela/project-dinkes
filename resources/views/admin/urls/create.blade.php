@@ -29,7 +29,7 @@
             <!-- URL Asli -->
             <div class="mb-4">
                 <label for="original_url" class="block text-sm font-medium text-gray-700">URL Asli</label>
-                <input type="url" name="original_url" id="original_url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="https://contoh.com" required>
+                <input type="url" name="original_url" id="original_url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
             </div>
 
             <!-- Shortlink Kustom -->
@@ -39,23 +39,74 @@
                     <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                         {{ url('/') }}/
                     </span>
-                    <input type="text" name="shortlink" id="shortlink" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="custom-nama">
+                    <input type="text" name="shortlink" id="shortlink" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                 </div>
             </div>
 
-                    <!-- Bidang - (Read Only)-->
-                    <div class="mb-4">
-                        <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
-                            <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 bg-gray-100 text-gray-600">
-                                {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
-                            </div>
-                        <!-- Input hidden ini yang mengirimkan ID Bidang ke controller -->
-                        <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
-                    </div>
+            {{-- Seksi --}}
+            <div class="mb-4">
+                <label for="users_id" class="block text-sm font-medium text-gray-700">Seksi</label>
 
+                @if(auth()->user()->role === 'admin')
+                <!-- Dropdown untuk admin -->
+                 <select name="users_id" id="users_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="" hidden>-- Pilih Seksi --</option>
+                    @foreach($user as $seksi)
+                            <option value="{{ $seksi->id }}">
+                                  {{ $seksi->name }}
+                            </option>
+                        @endforeach
+                </select>
+
+                    @error('users_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                @else
+                    <!-- Read only untuk user biasa -->
+                    <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                px-3 py-2 bg-gray-100 text-gray-600 sm:text-sm">
+                        {{ auth()->user()->name ?? 'N/A' }}
+                    </div>
+                    <input type="hidden" name="users_id" value="{{ auth()->user()->id }}">
+                @endif
+            </div>
+
+            {{--Bidang--}}
+            <div class="mb-4">
+                <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
+
+                @if(auth()->user()->role === 'admin')
+                    <!-- Dropdown untuk admin -->
+                    <select name="bidang_id" id="bidang_id"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                            focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <option value="" hidden>-- Pilih Bidang --</option>
+                        @foreach($bidangWithSeksi as $bidang)
+                            <option value="{{ $bidang->id }}"
+                                {{ old('bidang_id', $url->bidang_id ?? '') == $bidang->id ? 'selected' : '' }}>
+                                {{ $bidang->nama_bidang }}
+                            </option>
+                        @endforeach
+
+                    </select>
+                    @error('bidang_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                @else
+                    <!-- Read only untuk user biasa -->
+                    <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                px-3 py-2 bg-gray-100 text-gray-600 sm:text-sm">
+                        {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
+                    </div>
+                    <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
+                @endif
+            </div>
+
+
+            {{-- User --}}
             <!-- Seksi - Otomatis terisi -->
-            <!-- Input ini yang mengirimkan ID Seksi ke controller -->
-            <input type="hidden" name="users_id" value="{{ auth()->user()->id }}">
+            <!-- <input type="hidden" name="users_id" value="{{ auth()->user()->id }}"> -->
 
             <!-- Tombol -->
             <div class="flex justify-end mt-6">
@@ -69,4 +120,9 @@
         </form>
     </div>
 </div>
+
 @endsection
+
+
+
+

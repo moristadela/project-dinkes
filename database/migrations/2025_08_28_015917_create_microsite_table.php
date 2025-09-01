@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('microsites', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
             $table->string('shortlink')->unique();
             $table->foreignId('bidang_id')->constrained('bidang')->onDelete('cascade');
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
-            $table->date('tanggal');
+            $table->string('tanggal');
             $table->timestamps();
         });
     }
@@ -26,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+                Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('microsites');
     }
 };

@@ -44,6 +44,10 @@ class RolesAndPermissionsSeeder extends Seeder
         $admin = User::where('name',operator: 'Administrator')->first();
         $admin->assignRole('admin');
 
+
+        $user = User::where('name',operator: 'Sub Bagian Umum dan Kepegawaian')->first();
+        $admin->assignRole('user');
+
         
 
     }

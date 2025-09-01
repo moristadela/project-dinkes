@@ -1,4 +1,3 @@
-{{-- FILE: resources/views/layouts/app.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,22 +10,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100 min-h-screen flex flex-col">
-
+<body x-data="{ sidebarOpen: false }" class="bg-gray-100 min-h-screen flex flex-col">
     {{-- Navbar --}}
     @include('layouts.navbar')
 
-    {{-- Flex container for sidebar and main content --}}
     <div class="flex flex-1">
-
         {{-- Sidebar --}}
         @include('layouts.sidebar')
 
-        {{-- Main Content - Menggunakan flex-1 untuk mengisi sisa ruang --}}
+        {{-- Main Content --}}
         <main class="flex-1 p-6 bg-gray-100 overflow-y-auto">
             @yield('content')
         </main>
-
     </div>
 </body>
+
 </html>

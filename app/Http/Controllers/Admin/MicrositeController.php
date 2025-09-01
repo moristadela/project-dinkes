@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Bidang;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -13,9 +15,16 @@ class MicrositeController extends Controller
 {
     public function index()
     {
-        $microsites = Microsite::with(['bidang', 'user', 'daftarLinks'])
+        if (Auth::id()==1) {
+            $microsites = Microsite::with(['bidang', 'user', 'daftarLinks'])
+                                                ->paginate(10);
+        } else {
+            $microsites = Microsite::with(['bidang', 'user', 'daftarLinks'])
                         ->where('users_id', Auth::id())
                         ->paginate(10);
+        }
+        
+        
 
         $totalMicrosites = $microsites->total();
 
@@ -24,15 +33,16 @@ class MicrositeController extends Controller
 
     public function create()
     {
-        $bidangs = Bidang::all();
-        return view('admin.microsites.create', compact('bidangs'));
+        $bidangWithSeksi = Bidang::with('seksi')->get();
+       $user = User::all();
+        return view('admin.microsites.create', compact('bidangWithSeksi', 'user'));
     }
 
     // File: MicrositeController.php
 
     public function store(Request $request)
     {
-        // 1. Tambahkan validasi untuk link (sama seperti di method update)
+ 
         $request->validate([
             'shortlink' => [
                 'required', 'string', 'max:255', Rule::unique('microsites', 'shortlink')
@@ -44,22 +54,23 @@ class MicrositeController extends Controller
             'links.*.url' => 'required_with:links.*.title|nullable|url|max:2048',
         ]);
 
-        // 2. Buat data microsite utama
         $micrositeData = $request->only(['shortlink', 'title', 'bidang_id', 'tanggal']);
-        $micrositeData['users_id'] = Auth::id();
+        
 
-        // 3. Buat microsite dan simpan hasilnya ke dalam variabel
+        $tanggal = Carbon::parse($request->tanggal)
+            ->setTimeFrom(Carbon::now());
+
+        $micrositeData['tanggal'] = $tanggal;
+
         $microsite = Microsite::create($micrositeData);
 
-        // 4. Tambahkan logika untuk menyimpan link
         if ($request->has('links') && is_array($request->links)) {
             foreach ($request->links as $link) {
-                // Pastikan URL tidak kosong sebelum menyimpan
+
                 if (!empty($link['url'])) {
                     $microsite->daftarLinks()->create([
                         'original_link' => $link['url'],
                         'title' => $link['title'] ?? null,
-                        // Buat shortlink acak sederhana untuk setiap link
                         'shortlink' => substr(md5($link['url'] . time()), 0, 6),
                     ]);
                 }
@@ -86,7 +97,6 @@ class MicrositeController extends Controller
 
     public function update(Request $request, Microsite $microsite)
     {
-        // Validasi microsite dan links
         $request->validate([
             'shortlink' => [
                 'required',
@@ -98,6 +108,9 @@ class MicrositeController extends Controller
             'links.*.url' => 'nullable|url',
             'links.*.title' => 'nullable|string|max:255',
         ]);
+
+        $tanggal = Carbon::parse($request->tanggal)
+            ->setTimeFrom(Carbon::now());
 
         // Update data microsite utama
         $microsite->update([
@@ -139,7 +152,11 @@ class MicrositeController extends Controller
 
     public function showPublic($shortlink)
     {
-        $microsite = Microsite::with('daftarLinks')->where('shortlink', $shortlink)->firstOrFail();
+        $microsite = Microsite::with('daftarLinks')
+            ->where('shortlink', $shortlink)
+            ->firstOrFail();
         return view('microsite.show', compact('microsite'));
     }
+
+
 }

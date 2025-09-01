@@ -111,13 +111,7 @@
                 </table>
             </div>
 
-            {{-- pagination kalau pakai paginate() --}}
-            @if($urls->hasPages())
-                <div class="mt-6">
-                    {{ $urls->links() }}
-                </div>
-            @endif
-        </div>
+           </div>
     </div>
 @endsection
     

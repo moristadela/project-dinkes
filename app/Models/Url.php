@@ -38,7 +38,6 @@ class Url extends Model
     
     /**
      * Relasi ke model Seksi.
-     * Ini adalah bagian yang perlu ditambahkan untuk mengatasi error.
      */
     public function seksi()
     {

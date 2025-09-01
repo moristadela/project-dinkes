@@ -26,16 +26,26 @@
 
         {{-- Logo --}}
         <div class="flex justify-center gap-x-4 mb-8">
-            <img src="https://jatengprov.go.id/wp-content/uploads/2025/02/logo-jateng-ngopeni-nglakoni.png" alt="Logo Jateng Ngopeni" class="w-24 h-24 sm:w-28 sm:h-28 shadow-lg transform transition-transform duration-300 hover:scale-110">
-            <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" alt="Logo Dinas Kesehatan" class="w-24 h-24 sm:w-28 sm:h-28 shadow-lg transform transition-transform duration-300 hover:scale-110">
+            <img src="https://jatengprov.go.id/wp-content/uploads/2025/02/logo-jateng-ngopeni-nglakoni.png" 
+                 alt="Logo Jateng Ngopeni" 
+                 class="w-20 h-20 sm:w-24 sm:h-24 shadow-md rounded-lg transform transition-transform duration-300 hover:scale-110">
+            
+            <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" 
+                 alt="Logo Dinas Kesehatan" 
+                 class="w-20 h-20 sm:w-24 sm:h-24 shadow-md rounded-lg transform transition-transform duration-300 hover:scale-110">
         </div>
 
-        <!-- Microsite Header -->
+        {{-- Microsite Header --}}
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold mb-2 text-gray-900">{{ $microsite->title }}</h1>
+
             <p class="text-sm font-medium text-gray-500">
-                {{-- Gunakan pengecekan untuk menghindari error jika bidang atau seksi null --}}
                 {{ optional($microsite->bidang)->nama_bidang ?? 'Tidak Ada Bidang' }} / {{ optional($microsite->user)->name ?? 'Tidak Ada Seksi' }}
+            </p>
+
+            {{-- Tanggal Kegiatan --}}
+            <p class="mt-2 text-sm font-semibold text-gray-600">
+                {{ \Carbon\Carbon::parse($microsite->tanggal)->translatedFormat('d F Y') }}
             </p>
         </div>
 
@@ -44,7 +54,7 @@
             <div class="space-y-4">
                 @foreach($microsite->daftarLinks as $link)
                     <a href="{{ $link->original_link }}" target="_blank"
-                    class="link-card block w-full px-6 py-4 bg-blue-50 text-blue-700 ring-2 ring-blue-200 rounded-2xl font-semibold text-lg text-center">
+                    class="link-card block w-full px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 ring-2 ring-blue-200 rounded-xl font-semibold text-lg text-center hover:from-blue-100 hover:to-blue-200">
                         {{ $link->title }}
                     </a>
                 @endforeach

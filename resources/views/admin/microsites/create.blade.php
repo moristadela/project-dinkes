@@ -1,5 +1,3 @@
-{{-- FILE: resources/views/admin/microsites/create.blade.php --}}
-
 @extends('layouts.app')
 
 @section('content')
@@ -36,42 +34,96 @@
                 <label for="shortlink" class="block text-sm font-semibold text-gray-700">Nama Microsite</label>
                 <div class="mt-1 flex rounded-lg shadow-sm">
                     <span class="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-500 text-sm">
-                        {{ url('/m') }}/
+                        {{ url('/') }}/
                     </span>
-                    <input type="text" name="shortlink" id="shortlink" class="flex-1 block w-full rounded-r-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 transition-colors duration-200" placeholder="nama-microsite" value="{{ old('shortlink') }}" required>
+                    <input type="text" name="shortlink" id="shortlink" class="flex-1 block w-full rounded-r-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 transition-colors duration-200" value="{{ old('shortlink') }}" required>
                 </div>
                 @error('shortlink')
                     <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
                 @enderror
             </div>
 
-               {{--Kegiatan--}}
+                {{--Kegiatan--}}
                 <div>
                     <label for="title" class="block text-sm font-medium text-gray-700">Kegiatan</label>
                     <input type="text" name="title" id="title"
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('title') border-red-500 @enderror"
-                           value="{{ old('title') }}" required>
+                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('title') border-red-500 @enderror"
+                            value="{{ old('title') }}" required>
                     @error('title')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Bidang & Seksi -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Bidang & Tanggal Kegiatan -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6"> 
+                    <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
                     {{-- Bidang (read-only) --}}
-                    <div>
-                        <label for ="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
-                        {{-- Menampilkan nama bidang sebagai teks biasa --}}
-                            <div class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 bg-gray-100 text-gray-700">
-                                {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
-                            </div>
-                        {{-- Menyertakan input tersembunyi untuk mengirimkan ID bidang --}}
-                        <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
-                    </div>
+                     @if(auth()->user()->role === 'admin')
+                    <!-- Dropdown untuk admin -->
+                    <select name="bidang_id" id="bidang_id"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                            focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <option value="" hidden>-- Pilih Bidang --</option>
+                        @foreach($bidangWithSeksi as $bidang)
+                            <option value="{{ $bidang->id }}"
+                                {{ old('bidang_id', $url->bidang_id ?? '') == $bidang->id ? 'selected' : '' }}>
+                                {{ $bidang->nama_bidang }}
+                            </option>
+                        @endforeach
 
-                    <!-- Seksi (Read-only) -->
-                        <input type="hidden" name="users_id" value="{{ auth()->id() ?? '' }}">
+                    </select>
+                    @error('bidang_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                @else
+                    <!-- Read only untuk user biasa -->
+                    <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                px-3 py-2 bg-gray-100 text-gray-600 sm:text-sm">
+                        {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
+                    </div>
+                    <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
+                @endif
+<div>
+    <label for="users_id" class="block text-sm font-medium text-gray-700">Seksi</label>
+
+                @if(auth()->user()->role === 'admin')
+                <!-- Dropdown untuk admin -->
+                 <select name="users_id" id="users_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="" hidden>-- Pilih Seksi --</option>
+                    @foreach($user as $seksi)
+                            <option value="{{ $seksi->id }}">
+                                  {{ $seksi->name }}
+                            </option>
+                        @endforeach
+                </select>
+
+                    @error('users_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                @else
+                    <!-- Read only untuk user biasa -->
+                    <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                px-3 py-2 bg-gray-100 text-gray-600 sm:text-sm">
+                        {{ auth()->user()->name ?? 'N/A' }}
+                    </div>
+                    <input type="hidden" name="users_id" value="{{ auth()->user()->id }}">
+                @endif
+</div>
+                    {{-- Tanggal Kegiatan --}}
+                    <div>
+                        <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal Kegiatan</label>
+                        <input type="date" name="tanggal" id="tanggal" 
+                               class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('tanggal') border-red-500 @enderror" 
+                               value="{{ old('tanggal') }}" required>
+                        @error('tanggal')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
+
+                <!-- Seksi (Read-only) -->
+
 
                 <!-- Dynamic Links Fieldset -->
                 <fieldset class="border-t border-gray-200 pt-6">
@@ -83,14 +135,14 @@
                                     <div class="flex-1">
                                         <label for="links[{{ $index }}][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                                         <input type="text" name="links[{{ $index }}][title]" id="links[{{ $index }}][title]"
-                                               class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                               value="{{ $link['title'] }}" >
+                                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
+                                                value="{{ $link['title'] }}" >
                                     </div>
                                     <div class="flex-1">
                                         <label for="links[{{ $index }}][url]" class="block text-sm font-medium text-gray-700">URL</label>
                                         <input type="url" name="links[{{ $index }}][url]" id="links[{{ $index }}][url]"
-                                               class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                                               value="{{ $link['url'] }}">
+                                                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
+                                                value="{{ $link['url'] }}">
                                     </div>
                                     <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -104,12 +156,12 @@
                                 <div class="flex-1">
                                     <label for="links[0][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                                     <input type="text" name="links[0][title]" id="links[0][title]"
-                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                 </div>
                                 <div class="flex-1">
                                     <label for="links[0][url]" class="block text-sm font-medium text-gray-700">URL</label>
                                     <input type="url" name="links[0][url]" id="links[0][url]"
-                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                 </div>
                                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -149,14 +201,14 @@
                 <div class="flex-1">
                     <label for="links[${linkIndex}][title]" class="block text-sm font-medium text-gray-700">Judul Link</label>
                     <input type="text" name="links[${linkIndex}][title]" id="links[${linkIndex}][title]"
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           placeholder="Contoh: WhatsApp">
+                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
+                            >
                 </div>
                 <div class="flex-1">
                     <label for="links[${linkIndex}][url]" class="block text-sm font-medium text-gray-700">URL</label>
                     <input type="url" name="links[${linkIndex}][url]" id="links[${linkIndex}][url]"
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
-                           placeholder="https://wa.me/...">
+                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm"
+                            >
                 </div>
                 <button type="button" class="remove-link-btn p-2 text-red-600 hover:text-red-800 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

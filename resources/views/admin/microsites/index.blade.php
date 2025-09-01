@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microsite</title>
+    <link rel="icon" type="image/png" href="https://dinkes.jatengprov.go.id/wp-content/uploads/2023/02/Logo-Provinsi-Jawa-Tengah-1-e1675238827781.png">
+
 </head>
 <body>
 
@@ -50,6 +52,9 @@
                                 Bidang
                             </th>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Tanggal Kegiatan
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Tanggal Dibuat
                             </th>
                             <th scope="col" class="relative px-6 py-4">
@@ -65,7 +70,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
                                     <a href="/m/{{ $microsite->shortlink }}" target="_blank" class="hover:underline font-medium">
-                                        s.id/{{ $microsite->shortlink }}
+                                        http://project-dinkes.test/{{ $microsite->shortlink }}
                                     </a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -73,6 +78,9 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                     {{ $microsite->bidang->nama_bidang ?? '-' }}
+                                </td>
+                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                     {{ \Carbon\Carbon::parse($microsite->tanggal)->format('d M Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $microsite->created_at->format('d M Y') }}

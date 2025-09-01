@@ -1,5 +1,3 @@
-{{-- FILE: resources/views/admin/microsites/edit.blade.php --}}
-
 @extends('layouts.app')
 
 @section('content')
@@ -33,43 +31,51 @@
             @method('PUT')
 
             <div class="space-y-6">
-                <!-- Shortlink -->
+                {{-- Nama Microsite --}}
                 <div>
-                    <label for="shortlink" class="block text-sm font-medium text-gray-700">Shortlink</label>
-                    <div class="mt-1 relative rounded-lg shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500 sm:text-sm">s.id/</span>
-                        </div>
-                        <input type="text" name="shortlink" id="shortlink"
-                               class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg @error('shortlink') border-red-500 @enderror"
-                               placeholder="nama-microsite" value="{{ old('shortlink', $microsite->shortlink) }}" required>
+                    <label for="shortlink" class="block text-sm font-semibold text-gray-700">Nama Microsite</label>
+                    <div class="mt-1 flex rounded-lg shadow-sm">
+                        <span class="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-500 text-sm">
+                            {{ url('/') }}/
+                        </span>
+                        <input type="text" name="shortlink" id="shortlink" 
+                            class="flex-1 block w-full rounded-r-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3 transition-colors duration-200 @error('shortlink') border-red-500 @enderror"
+                            value="{{ old('shortlink', $microsite->shortlink) }}" required>
                     </div>
                     @error('shortlink')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Title -->
+                {{-- Judul Microsite --}}
                 <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700">Judul Microsite</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Kegiatan</label>
                     <input type="text" name="title" id="title"
-                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('title') border-red-500 @enderror"
-                           value="{{ old('title', $microsite->title) }}" required>
+                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 @error('title') border-red-500 @enderror"
+                        value="{{ old('title', $microsite->title) }}" required>
                     @error('title')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Bidang & User -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Bidang</label>
-                        <p class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 bg-gray-100 text-gray-700">
-                            {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
-                        </p>
-                        <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
+                {{-- Tanggal Kegiatan --}}
+                <div>
+                    <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal Kegiatan</label>
+                    <input type="date" name="tanggal" id="tanggal" 
+                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 @error('tanggal') border-red-500 @enderror" 
+                        value="{{ old('tanggal', \Carbon\Carbon::parse($microsite->tanggal)->format('Y-m-d')) }}" required>
+                    @error('tanggal')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Bidang --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Bidang</label>
+                    <div class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 bg-gray-100 text-gray-700">
+                        {{ auth()->user()->bidang->nama_bidang ?? 'N/A' }}
                     </div>
-                    <input type="hidden" name="users_id" value="{{ auth()->id() }}">
+                    <input type="hidden" name="bidang_id" value="{{ auth()->user()->bidang_id }}">
                 </div>
 
                 <!-- Dynamic Links Fieldset -->
