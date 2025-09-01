@@ -100,7 +100,8 @@ class UrlShortenerController extends Controller
     public function edit(Url $url)
     {
         $bidangWithSeksi = Bidang::with('seksi')->get();
-        return view('admin.urls.edit', compact('url', 'bidangWithSeksi'));
+       $user = User::all();
+        return view('admin.urls.edit', compact('url', 'bidangWithSeksi', 'user'));
     }
 
     /**

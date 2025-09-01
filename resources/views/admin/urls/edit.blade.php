@@ -41,6 +41,34 @@
             </div>
 
             <div class="mb-4">
+                <label for="users_id" class="block text-sm font-medium text-gray-700">Seksi</label>
+
+                @if(auth()->user()->role === 'admin')
+                <!-- Dropdown untuk admin -->
+                 <select name="users_id" id="users_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="" hidden>-- Pilih Seksi --</option>
+                    @foreach($user as $seksi)
+                            <option value="{{ $seksi->id }}">
+                                  {{ $seksi->name }}
+                            </option>
+                        @endforeach
+                </select>
+
+                    @error('users_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                @else
+                    <!-- Read only untuk user biasa -->
+                    <div class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                px-3 py-2 bg-gray-100 text-gray-600 sm:text-sm">
+                        {{ auth()->user()->name ?? 'N/A' }}
+                    </div>
+                    <input type="hidden" name="users_id" value="{{ auth()->user()->id }}">
+                @endif
+            </div>
+
+            <div class="mb-4">
                 <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
                 <select name="bidang_id" id="bidang_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
                     <option value="">Pilih Bidang</option>

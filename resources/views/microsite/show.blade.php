@@ -45,7 +45,7 @@
 
             {{-- Tanggal Kegiatan --}}
             <p class="mt-2 text-sm font-semibold text-gray-600">
-                {{ \Carbon\Carbon::parse($microsite->tanggal)->translatedFormat('d F Y') }}
+                {{$microsite->tanggal }}
             </p>
         </div>
 
