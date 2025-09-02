@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="icon" href="https://dinkes.jatengprov.go.id/wp-content/uploads/2023/02/Logo-Provinsi-Jawa-Tengah-1-e1675238827781.png" type="image/png">
+
 </head>
 <body>
 
@@ -40,13 +42,13 @@
                 <a href="{{ route('admin.urls.create') }}" class="w-full md:w-auto px-6 py-3 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 transition-colors mb-4 md:mb-0 transform hover:-translate-y-1">
                     <i class="fas fa-plus mr-2"></i> Buat URL Baru
                 </a>
-                <div class="w-full md:w-1/3 flex">
+                <!-- <div class="w-full md:w-1/3 flex">
                     <input type="text" placeholder="Cari URL..."
                            class="flex-1 border border-gray-300 rounded-l-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
                     <button class="px-5 py-2 bg-blue-600 text-white rounded-r-full hover:bg-blue-700 transition-colors text-sm">
                         <i class="fas fa-search"></i>
                     </button>
-                </div>
+                </div> -->
             </div>
 
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Daftar URL yang Ada</h2>
@@ -56,8 +58,8 @@
                     <thead class="bg-blue-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Judul</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">URL Singkat</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">URL Asli</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Short URL </th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Sumber Link</th>
                             <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Seksi</th>
                             <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Bidang</th>
                             <th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Dibuat</th>

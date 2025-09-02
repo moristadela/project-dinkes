@@ -58,7 +58,7 @@
                 </div>
 
                 <!-- Bidang, Seksi & Tanggal -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="mb-4 gap-6">
                     <!-- Bidang -->
                     <div>
                         <label for="bidang_id" class="block text-sm font-medium text-gray-700">Bidang</label>
@@ -85,8 +85,8 @@
                     </div>
 
                     <!-- Seksi -->
-                    <div>
-                        <label for="users_id" class="block text-sm font-medium text-gray-700">Seksi</label>
+                    <div class="mb-4">
+                        <label for="users_id" class="block text-sm font-medium text-gray-700 mt-4">Seksi</label>
                         @if(auth()->user()->role === 'admin')
                             <select name="users_id" id="users_id"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">

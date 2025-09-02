@@ -43,7 +43,8 @@
                 <img src="https://magang.dinkesjatengprov.go.id/img/dinkes.png" class="h-20 w-auto" alt="Logo Dinkes Jateng" />
             </div>
             <!-- Title -->
-            <h1 class="text-xl font-bold text-gray-800 leading-tight">Dinas Kesehatan Provinsi Jawa Tengah</h1>
+            <h1 class="text-xl font-bold text-gray-800 leading-tight">Dinas Kesehatan<br> Provinsi 
+            Jawa Tengah</h1>
         </div>
         
         <!-- Form Section -->

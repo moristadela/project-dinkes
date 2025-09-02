@@ -46,7 +46,7 @@
             Oops! Shortlink yang kamu akses tidak tersedia atau sudah dihapus.
         </p>
 
-        {{-- Tombol --}}
+        <!-- {{-- Button --}}
         <div class="flex flex-col sm:flex-row justify-center gap-4">
             <a href="{{ url('/') }}" 
             class="link-card flex items-center justify-center px-6 py-3 w-full sm:w-auto bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-xl font-semibold text-center hover:from-blue-100 hover:to-blue-200">
@@ -56,7 +56,7 @@
             class="link-card flex items-center justify-center px-6 py-3 w-full sm:w-auto bg-gradient-to-r from-green-50 to-green-100 text-green-700 rounded-xl font-semibold text-center hover:from-green-100 hover:to-green-200">
                 Kembali
             </a>
-        </div>
+        </div> -->
 
     </div>
 

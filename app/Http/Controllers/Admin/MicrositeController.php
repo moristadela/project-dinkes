@@ -56,8 +56,8 @@ class MicrositeController extends Controller
 
         $micrositeData = $request->only(['shortlink', 'title', 'bidang_id', 'tanggal', 'users_id']);
 
-        $tanggal = Carbon::parse($request->tanggal)
-            ->setTimeFrom(Carbon::now());
+        $tanggal = $request->tanggal;
+        
 
         $micrositeData['tanggal'] = $tanggal;
 
@@ -82,16 +82,9 @@ class MicrositeController extends Controller
 
     public function edit(Microsite $microsite)
     {
-        if (Auth::id() !== $microsite->users_id) {
-            abort(403);
-        }
-
-        $bidangs = Bidang::all();
-
-        $user = Auth::user();
-        $bidangWithSeksi = $user->bidang ? $user->bidang->seksi : collect();
-
-        return view('admin.microsites.edit', compact('microsite', 'bidangs', 'bidangWithSeksi'));
+         $bidangWithSeksi = Bidang::with('seksi')->get();
+       $user = User::all();
+        return view('admin.microsites.edit', compact('microsite', 'bidangWithSeksi', 'user'));
     }
 
     public function update(Request $request, Microsite $microsite)
@@ -108,8 +101,7 @@ class MicrositeController extends Controller
             'links.*.title' => 'nullable|string|max:255',
         ]);
 
-        $tanggal = Carbon::parse($request->tanggal)
-            ->setTimeFrom(Carbon::now());
+        $tanggal = $request->tanggal;
 
         // Update data microsite utama
         $microsite->update([

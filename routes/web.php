@@ -47,20 +47,20 @@ Route::middleware(['auth'])
         Route::resource('seksi', SeksiController::class);
 
         // Microsites
-        Route::resource('microsites', MicrositeController::class);
+        Route::resource('microsites', MicrositeController::class)->middleware('auth');
     });
 
 
-// Shortlink
-Route::prefix('shortlink')->name('shortlink.')->group(function () {
-    Route::get('/', [UrlShortenerController::class, 'generateForm'])->name('index');
-    Route::get('/create', [UrlShortenerController::class, 'create'])->name('create');
-    Route::post('/generate', [UrlShortenerController::class, 'generate'])->name('generate');
-    Route::post('/save', [UrlShortenerController::class, 'save'])->name('save');
-    Route::get('/shortlink/{id}/edit', [UrlShortenerController::class, 'edit'])->name('shortlink.edit');
-    Route::put('/shortlink/{id}', [UrlShortenerController::class, 'update'])->name('shortlink.update');
+// // Shortlink
+// Route::prefix('shortlink')->name('shortlink.')->group(function () {
+//     Route::get('/', [UrlShortenerController::class, 'generateForm'])->name('index');
+//     Route::get('/create', [UrlShortenerController::class, 'create'])->name('create');
+//     Route::post('/generate', [UrlShortenerController::class, 'generate'])->name('generate');
+//     Route::post('/save', [UrlShortenerController::class, 'save'])->name('save');
+//     Route::get('/shortlink/{id}/edit', [UrlShortenerController::class, 'edit'])->name('shortlink.edit');
+//     Route::put('/shortlink/{id}', [UrlShortenerController::class, 'update'])->name('shortlink.update');
 
-});
+// });
 
 
 // Microsite

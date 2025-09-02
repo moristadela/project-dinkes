@@ -24,7 +24,6 @@ class UrlShortenerController extends Controller
     public function index()
     {
         
-        // Ambil URL hanya untuk pengguna yang sedang login
         if (Auth::id()==1) {
             $urls = Url::with(['bidang', 'seksi', 'user'])->get();
             $totalMicrosites = Microsite::count();
@@ -35,7 +34,6 @@ class UrlShortenerController extends Controller
             $totalMicrosites =  Microsite::where('users_id', Auth::id())->count();
         }
         
-        // Ambil total URL dari pagination
         $totalUrls = $urls->count();
 
         // Ambil jumlah total microsite milik user yang sedang login
@@ -75,18 +73,16 @@ class UrlShortenerController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
-            'bidang_id' => 'required|exists:bidang,id', // pastikan nama tabel benar
-            'shortlink' => 'nullable|string|max:20|alpha_dash|unique:url,short_url',
+            'bidang_id' => 'required|exists:bidang,id', 
+            'short_url' => 'nullable|string|max:20|alpha_dash|unique:url,short_url',
             'users_id' => 'required|exists:users,id',
         ]);
 
         // Siapkan data untuk disimpan
-        $data = $request->except(['shortlink']);
-        $data['short_url'] = $request->input('shortlink') ?? Str::random(6);
+        $data = $request->except(['short_url']);
+        $data['short_url'] = $request->input('short_url') ?? Str::random(6);
 
-        // $data['users_id'] = Auth::id(); // lebih umum pakai user_id
-
-        // Buat record URL baru
+        // $data['users_id'] = Auth::id(); 
         Url::create($data);
 
         return redirect()->route('admin.urls.index')->with('success', 'URL berhasil dibuat!');
@@ -120,7 +116,7 @@ class UrlShortenerController extends Controller
             'title' => 'required|string|max:255',
             'original_url' => 'required|url',
             'bidang_id' => 'required|exists:bidang,id',
-            'shortlink' => [
+            'short_url' => [
                 'nullable',
                 'string',
                 'max:20',
@@ -129,12 +125,10 @@ class UrlShortenerController extends Controller
             ],
         ]);
 
-        // Siapkan data untuk diperbarui, termasuk users_id dari pengguna yang terautentikasi
-        $data = $request->except(['shortlink']);
-        $data['short_url'] = $request->input('shortlink') ?? $url->short_url;
-        $data['users_id'] = Auth::id(); // Mengambil ID pengguna yang sedang login
+        $data = $request->except(['short_url']);
+        $data['short_url'] = $request->input('short_url') ?? $url->short_url;
 
-        // Perbarui record URL
+
         $url->update($data);
 
         return redirect()->route('admin.urls.index')->with('success', 'URL berhasil diperbarui!');
