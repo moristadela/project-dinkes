@@ -23,23 +23,25 @@ class UrlShortenerController extends Controller
     
     public function index()
     {
+        
         // Ambil URL hanya untuk pengguna yang sedang login
-        if (Auth::id()==1) {$urls = Url::with(['bidang', 'seksi', 'user'])
-                    ->get();
-            # code...
+        if (Auth::id()==1) {
+            $urls = Url::with(['bidang', 'seksi', 'user'])->get();
+            $totalMicrosites = Microsite::count();
         } else {
             $urls = Url::with(['bidang', 'seksi', 'user'])
                     ->where('users_id', Auth::id())
                     ->get();
+            $totalMicrosites =  Microsite::where('users_id', Auth::id())->count();
         }
         
-        
-
         // Ambil total URL dari pagination
         $totalUrls = $urls->count();
 
         // Ambil jumlah total microsite milik user yang sedang login
-        $totalMicrosites = Microsite::where('users_id', Auth::id())->count();
+        // $totalMicrosites = Microsite::where('users_id', operator: Auth::id())->count();
+    
+
 
         // Kirimkan semua data ke view
         return view('admin.urls.index', compact('urls', 'totalUrls', 'totalMicrosites'));

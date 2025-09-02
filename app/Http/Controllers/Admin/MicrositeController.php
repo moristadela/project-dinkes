@@ -52,10 +52,14 @@ class MicrositeController extends Controller
             'tanggal' => 'required',
             'links.*.title' => 'nullable|string|max:255',
             'links.*.url' => 'required_with:links.*.title|nullable|url|max:2048',
-            'users_id' => 'required|exists:users,id',
         ]);
 
         $micrositeData = $request->only(['shortlink', 'title', 'bidang_id', 'tanggal', 'users_id']);
+
+        $tanggal = Carbon::parse($request->tanggal)
+            ->setTimeFrom(Carbon::now());
+
+        $micrositeData['tanggal'] = $tanggal;
 
         $microsite = Microsite::create($micrositeData);
 
@@ -78,10 +82,16 @@ class MicrositeController extends Controller
 
     public function edit(Microsite $microsite)
     {
-        $bidangWithSeksi = Bidang::with('seksi')->get();
-       $user = User::all();
+        if (Auth::id() !== $microsite->users_id) {
+            abort(403);
+        }
 
-        return view('admin.microsites.edit', compact('microsite', 'bidangWithSeksi', 'user'));
+        $bidangs = Bidang::all();
+
+        $user = Auth::user();
+        $bidangWithSeksi = $user->bidang ? $user->bidang->seksi : collect();
+
+        return view('admin.microsites.edit', compact('microsite', 'bidangs', 'bidangWithSeksi'));
     }
 
     public function update(Request $request, Microsite $microsite)
@@ -93,12 +103,13 @@ class MicrositeController extends Controller
             ],
             'title' => 'required|string|max:255',
             'bidang_id' => 'required|exists:bidang,id',
-            'tanggal' => 'required',
+            'tanggal' => 'required|date',
             'links.*.url' => 'nullable|url',
             'links.*.title' => 'nullable|string|max:255',
-            'users_id' => 'required|exists:users,id',
         ]);
 
+        $tanggal = Carbon::parse($request->tanggal)
+            ->setTimeFrom(Carbon::now());
 
         // Update data microsite utama
         $microsite->update([
@@ -106,7 +117,6 @@ class MicrositeController extends Controller
             'title' => $request->title,
             'bidang_id' => $request->bidang_id,
             'tanggal' => $request->tanggal,
-            'users_id' => $request->users_id,
         ]);
 
         if ($request->has('links') && is_array($request->links)) {

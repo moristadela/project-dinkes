@@ -10,10 +10,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-6">Daftar URL</h1>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <div class="bg-white rounded-3xl shadow-lg p-6 flex items-center space-x-4 transition-transform duration-300 transform hover:scale-105">
                 <div class="flex-shrink-0 bg-blue-100 text-blue-600 rounded-full p-3">
                     <i class="fas fa-link fa-xl"></i>
@@ -73,15 +73,15 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <a href="{{ url($url->short_url) }}" target="_blank"
-                                    class="text-blue-600 hover:text-blue-800 font-medium">
+                                        class="text-blue-600 hover:text-blue-800 font-medium">
                                         {{ $url->short_url }}
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 text-sm break-all">
+                               <td class="px-6 py-4 text-sm max-w-[200px] truncate">
                                     <a href="{{ $url->original_url }}" target="_blank"
-                                    class="text-blue-600 hover:text-blue-800"
-                                    title="{{ $url->original_url }}">
-                                        {{ Str::limit($url->original_url, 60) }}
+                                        class="text-blue-600 hover:text-blue-800"
+                                        title="{{ $url->original_url }}">
+                                        {{ $url->original_url }}
                                     </a>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-center text-gray-500">

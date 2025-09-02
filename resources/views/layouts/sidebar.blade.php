@@ -1,61 +1,37 @@
-{{-- Overlay untuk mobile --}}
-<div x-show="sidebarOpen"
-     x-transition.opacity
-     class="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
-     @click="sidebarOpen = false">
-</div>
-
-{{-- Sidebar --}}
-<aside x-show="sidebarOpen || window.innerWidth >= 768"
-       x-transition:enter="transition ease-out duration-300"
-       x-transition:enter-start="-translate-x-full"
-       x-transition:enter-end="translate-x-0"
-       x-transition:leave="transition ease-in duration-300"
-       x-transition:leave-start="translate-x-0"
-       x-transition:leave-end="-translate-x-full"
-       class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform md:relative md:flex md:translate-x-0 md:flex-col md:rounded-r-3xl my-4 ml-4">
-
+<aside 
+    x-show="sidebarOpen || isDesktop"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="-translate-x-full"
+    x-transition:enter-end="translate-x-0"
+    x-transition:leave="transition ease-in duration-300"
+    x-transition:leave-start="translate-x-0"
+    x-transition:leave-end="-translate-x-full"
+    class="fixed md:relative inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform md:translate-x-0 md:flex md:flex-col transition-transform duration-300 ease-in-out
+           md:my-4 md:ml-4 md:rounded-r-3xl"
+    style="display: none;"
+>
     <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-        {{-- Dashboard --}}
-        <a href="{{ route('admin.urls.index') }}" class="flex items-center space-x-2 px-3 py-2 rounded-xl transition duration-150 transform hover:scale-105
-            @if(request()->routeIs('admin.urls.index'))
-                text-blue-800 bg-blue-100 font-semibold
-            @else
-                text-gray-700 hover:bg-green-100 hover:text-green-800
-            @endif">
+        <a href="{{ route('admin.urls.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg transition hover:bg-blue-100
+            @if(request()->routeIs('admin.urls.index')) bg-blue-100 text-blue-800 font-semibold @else text-gray-700 @endif">
             <i class="fas fa-tachometer-alt w-5"></i>
             <span>Dashboard</span>
         </a>
 
-        {{-- Microsite --}}
-        <a href="{{ route('admin.microsites.index') }}" class="flex items-center space-x-2 px-3 py-2 rounded-xl transition duration-150 transform hover:scale-105
-            @if(request()->routeIs('admin.microsites.index'))
-                text-blue-800 bg-blue-100 font-semibold
-            @else
-                text-gray-700 hover:bg-green-100 hover:text-green-800
-            @endif">
+        <a href="{{ route('admin.microsites.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg transition hover:bg-blue-100
+            @if(request()->routeIs('admin.microsites.index')) bg-blue-100 text-blue-800 font-semibold @else text-gray-700 @endif">
             <i class="fas fa-list-alt w-5"></i>
             <span>Microsite</span>
         </a>
 
-        {{-- Admin only --}}
         @role('admin')
-        <a href="{{ route('admin.bidang.index') }}" class="flex items-center space-x-2 px-3 py-2 rounded-xl transition duration-150 transform hover:scale-105
-            @if(request()->routeIs('admin.bidang.index'))
-                text-blue-800 bg-blue-100 font-semibold
-            @else
-                text-gray-700 hover:bg-green-100 hover:text-green-800
-            @endif">
+        <a href="{{ route('admin.bidang.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg transition hover:bg-blue-100
+            @if(request()->routeIs('admin.bidang.index')) bg-blue-100 text-blue-800 font-semibold @else text-gray-700 @endif">
             <i class="fas fa-building w-5"></i>
             <span>Daftar Bidang</span>
         </a>
 
-        <a href="{{ route('admin.users.index') }}" class="flex items-center space-x-2 px-3 py-2 rounded-xl transition duration-150 transform hover:scale-105
-            @if(request()->routeIs('admin.users.index'))
-                text-blue-800 bg-blue-100 font-semibold
-            @else
-                text-gray-700 hover:bg-green-100 hover:text-green-800
-            @endif">
+        <a href="{{ route('admin.users.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg transition hover:bg-blue-100
+            @if(request()->routeIs('admin.users.index')) bg-blue-100 text-blue-800 font-semibold @else text-gray-700 @endif">
             <i class="fas fa-users-cog w-5"></i>
             <span>User Management</span>
         </a>
